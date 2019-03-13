@@ -34,14 +34,10 @@ public class EmployeeDao {
     private String spouseEmployeeId;
 
     @Column(name = "centre")
-    private Long centerId;
+    private Long centreId;
 
     @Column(name = "status")
     private Byte status;
-
-    @Column(name = "created_at")
-    private Date createdAt;
-
 
     public Long getId() {
         return id;
@@ -91,12 +87,12 @@ public class EmployeeDao {
         this.spouseEmployeeId = spouseEmployeeId;
     }
 
-    public Long getCenterId() {
-        return centerId;
+    public Long getCentreId() {
+        return centreId;
     }
 
-    public void setCenterId(Long centerId) {
-        this.centerId = centerId;
+    public void setCentreId(Long centreId) {
+        this.centreId = centreId;
     }
 
     public Byte getStatus() {
@@ -105,13 +101,5 @@ public class EmployeeDao {
 
     public void setStatus(Byte status) {
         this.status = status;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
     }
 }
