@@ -132,5 +132,6 @@ curl -X GET http://localhost:8080/centres/1/employees/2'
 </pre>
 
 <h3>Extra Gyan</h3>
+Link for API contracts is available <a href="https://github.com/garvitjain314/contracts/tree/master/samples"> here </a> <br/> 
 Command to be used to build (in parent directory):<br/>
 <pre>mvn clean install -Plocal</pre>
