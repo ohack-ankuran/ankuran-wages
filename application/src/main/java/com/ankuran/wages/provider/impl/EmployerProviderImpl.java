@@ -26,14 +26,14 @@ public class EmployerProviderImpl implements EmployeeProvider {
     @Override
     public EmployeeResponseDTO fetchEmployeeByCentreIDAndFullName(Long centreId, String fullName) {
         EmployeeDao employeeDao =  employeeRepository.findByCentreIdAndAndFullName(centreId, fullName);
-        EmployeeResponseDTO employeeResponseDTO = employeeMapper.mapEmployeeDaoToDTO(employeeDao);;
+        EmployeeResponseDTO employeeResponseDTO = employeeMapper.mapEmployeeDaoToDTO(employeeDao);
         return employeeResponseDTO;
     }
     
     @Override
     public EmployeeResponseDTO fetchEmployeeByCentreIDAndEmployeeId(Long centreId, Long employeeId) {
         EmployeeDao employeeDao =  employeeRepository.findByCentreIdAndId(centreId, employeeId);
-        EmployeeResponseDTO employeeResponseDTO = employeeMapper.mapEmployeeDaoToDTO(employeeDao);;
+        EmployeeResponseDTO employeeResponseDTO = employeeMapper.mapEmployeeDaoToDTO(employeeDao);
         return employeeResponseDTO;
     }
 

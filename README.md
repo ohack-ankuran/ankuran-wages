@@ -58,49 +58,49 @@ curl -X GET http://localhost:8080/centres/1/employees/'
     "employees": [
         {
             "id": 1,
-            "mobileNo": null,
-            "dateOfJoining": "2019-02-24T10:20:11.000+0000",
+            "fullName": "Sushil Mittal",
+            "mobile": null,
+            "timeOfJoining": "2019-02-24T10:20:11.000+0000",
             "husband": null,
             "centre": 1,
             "active": true,
-            "name": {
-                "lastName": null,
-                "firstName": null,
-                "fullName": "Sushil Mittal"
-            }
+            "outstandingDue": 500.7
         },
         {
             "id": 2,
-            "mobileNo": "9880199911",
-            "dateOfJoining": "2019-03-02T10:20:10.000+0000",
+            "fullName": "Garvit Jain",
+            "mobile": "9880199911",
+            "timeOfJoining": "2019-03-02T10:20:10.000+0000",
             "husband": null,
             "centre": 1,
             "active": true,
-            "name": {
-                "lastName": null,
-                "firstName": null,
-                "fullName": "Garvit Jain"
-            }
+            "outstandingDue": 300.5
         },
         {
             "id": 3,
-            "mobileNo": "9207179678",
-            "dateOfJoining": "2019-03-03T10:20:10.000+0000",
+            "fullName": "Rajat K",
+            "mobile": "9207179678",
+            "timeOfJoining": "2019-03-03T10:20:10.000+0000",
             "husband": {
-                "name": {
-                    "lastName": null,
-                    "firstName": null,
-                    "fullName": "Bhagvaan Jaane"
-                },
+                "fullName": "Bhagvaan Jaane",
                 "bslEmployeeId": "aadhar-card-number"
             },
             "centre": 1,
             "active": false,
-            "name": {
-                "lastName": null,
-                "firstName": null,
-                "fullName": "Rajat K"
-            }
+            "outstandingDue": 400.7
+        },
+        {
+            "id": 4,
+            "fullName": "Nikita",
+            "mobile": "11111111",
+            "timeOfJoining": "2019-03-05T10:20:10.000+0000",
+            "husband": {
+                "fullName": null,
+                "bslEmployeeId": "aadhar-card-number"
+            },
+            "centre": 1,
+            "active": false,
+            "outstandingDue": null
         }
     ]
 }
@@ -121,16 +121,13 @@ curl -X GET http://localhost:8080/centres/1/employees/2'
 <pre>
 {
     "id": 2,
-    "mobileNo": "9880199911",
-    "dateOfJoining": "2019-03-02T10:20:10.000+0000",
+    "fullName": "Garvit Jain",
+    "mobile": "9880199911",
+    "timeOfJoining": "2019-03-02T10:20:10.000+0000",
     "husband": null,
     "centre": 1,
     "active": true,
-    "name": {
-        "lastName": null,
-        "firstName": null,
-        "fullName": "Garvit Jain"
-    }
+    "outstandingDue": 300.5
 }
 </pre>
 

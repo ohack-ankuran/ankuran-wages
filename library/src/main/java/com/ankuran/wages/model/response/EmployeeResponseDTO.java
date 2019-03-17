@@ -6,29 +6,36 @@ import java.util.Date;
 public class EmployeeResponseDTO {
 
     private Long id;
-    private String mobileNo;
-    private Date dateOfJoining;
+    private String fullName;
+    private String mobile;
+    private Date timeOfJoining;
     private SpouseResponseDTO husband;
     private Long centre;
     private boolean active;
-    private PersonNameDTO name;
+    private Double outstandingDue;
 	public Long getId() {
 		return id;
 	}
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public String getMobileNo() {
-		return mobileNo;
+	public String getFullName() {
+		return fullName;
 	}
-	public void setMobileNo(String mobileNo) {
-		this.mobileNo = mobileNo;
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
-	public Date getDateOfJoining() {
-		return dateOfJoining;
+	public String getMobile() {
+		return mobile;
 	}
-	public void setDateOfJoining(Date dateOfJoining) {
-		this.dateOfJoining = dateOfJoining;
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+	public Date getTimeOfJoining() {
+		return timeOfJoining;
+	}
+	public void setTimeOfJoining(Date timeOfJoining) {
+		this.timeOfJoining = timeOfJoining;
 	}
 	public SpouseResponseDTO getHusband() {
 		return husband;
@@ -48,12 +55,12 @@ public class EmployeeResponseDTO {
 	public void setActive(boolean active) {
 		this.active = active;
 	}
-	public PersonNameDTO getName() {
-		return name;
+	public Double getOutstandingDue() {
+		return outstandingDue;
 	}
-	public void setName(PersonNameDTO name) {
-		this.name = name;
+	public void setOutstandingDue(Double outstandingDue) {
+		this.outstandingDue = outstandingDue;
 	}
-
-
+    
+	
 }
