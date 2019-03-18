@@ -16,4 +16,5 @@ public interface EmployeeRepository extends JpaRepository<EmployeeDao, Long> {
     public EmployeeDao findByCentreIdAndAndFullName(Long centreId, String fullName);
     public EmployeeDao findByCentreIdAndId(Long centreId, Long id);
 	public List<EmployeeDao> findAllByCentreId(Long centreId);
+	public List<EmployeeDao> findAllByCentreIdAndStatusNot(Long centreId, Byte status);
 }

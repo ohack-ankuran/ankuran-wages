@@ -11,8 +11,14 @@ public class EmployeeResponseDTO {
     private Date timeOfJoining;
     private SpouseResponseDTO husband;
     private Long centre;
-    private boolean active;
+    private Boolean active;
     private Double outstandingDue;
+    public Boolean getActive() {
+		return active;
+	}
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
 	public Long getId() {
 		return id;
 	}
@@ -48,12 +54,6 @@ public class EmployeeResponseDTO {
 	}
 	public void setCentre(Long centre) {
 		this.centre = centre;
-	}
-	public boolean isActive() {
-		return active;
-	}
-	public void setActive(boolean active) {
-		this.active = active;
 	}
 	public Double getOutstandingDue() {
 		return outstandingDue;

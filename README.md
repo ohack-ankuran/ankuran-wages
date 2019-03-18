@@ -106,7 +106,7 @@ curl -X GET http://localhost:8080/centres/1/employees/'
 }
 </pre>
 
-2. Get an Employee for a Centre by id <br/>
+4. Get an Employee for a Centre by id <br/>
 <pre><i>Request template:</i></pre>
 <pre>
 curl -X GET http://localhost:8080/centres/{centre-id}/employees/{employee-id}'
@@ -128,6 +128,151 @@ curl -X GET http://localhost:8080/centres/1/employees/2'
     "centre": 1,
     "active": true,
     "outstandingDue": 300.5
+}
+</pre>
+
+5. Add an Employee to a Centre with outstanding amount <br/>
+<pre><i>Request template:</i></pre>
+<pre>
+curl -X POST http://localhost:8080/centres/{centre-id}/employees/' -d {Post-Body}
+**centre-id** is a path variable denoting the unique centre specific id with allowed values in positive, non-zero and long types
+**Post-Body** is the dedicated post body for the Post call.
+Sample POST Body:
+{
+	"fullName": "Devasena",
+	"mobile": "9494111222", 
+	"husband": {
+		"fullName": "Mahendra Bahubali",
+		"bslEmployeeId": "BSL-236799800"
+	},
+	"outstandingDue": 10000
+}
+**Note:** fullName in Post body is mandatory, rest are optional.
+</pre>
+<pre>Request :</pre>
+<pre>
+curl -X POST http://localhost:8080/centres/1/employees/' -d '{
+	"fullName": "Devasena",
+	"mobile": "9494111222",
+	"husband": {
+		"fullName": "Mahendra Bahubali",
+		"bslEmployeeId": "BSL-236799800"
+	},
+	"outstandingDue": 10000
+}'
+</pre>
+<pre>Response :</pre>
+<pre>
+{
+    "id": 6,
+    "links": [
+        {
+            "href": "/centres/1/employees/6",
+            "method": "GET",
+            "rel": "self",
+            "title": "Get employee details with this employee id."
+        },
+        {
+            "href": "/centres/1/employees/6",
+            "method": "PUT",
+            "rel": "self",
+            "title": "Provide additional employee details for an existing employee with this id."
+        },
+        {
+            "href": "/centres/1/employees/6",
+            "method": "PATCH",
+            "rel": "self",
+            "title": "Update or modify existing employee details with this id."
+        },
+        {
+            "href": "/centres/1/employees/6",
+            "method": "DELETE",
+            "rel": "self",
+            "title": "Delete employee linked with this id."
+        }
+    ]
+}
+</pre>
+
+6. Delete an Employee for a Centre by id <br/>
+<pre><i>Request template:</i></pre>
+<pre>
+curl -X DELETE http://localhost:8080/centres/{centre-id}/employees/{employee-id}'
+**centre-id** is a path variable denoting the unique centre specific id with allowed values in positive, non-zero and long types
+**employee-id** is a path variable denoting the unique employee specific id with allowed values in positive, non-zero and long types
+This is a soft-delete operation that marks the status to inactive for the employee id.
+</pre>
+<pre>Request :</pre>
+<pre>
+curl -X DELETE http://localhost:8080/centres/1/employees/1'
+</pre>
+<pre>Response :</pre>
+<pre>
+{
+    "id": 1,
+    "fullName": "Sushil Mittal",
+    "mobile": null,
+    "timeOfJoining": "2019-02-24T10:20:11.000+0000",
+    "husband": null,
+    "centre": 1,
+    "active": false,
+    "outstandingDue": 500.7
+}
+</pre>
+
+7. Patch an Employee data for a Centre with outstanding amount using employee id<br/>
+<pre><i>Request template:</i></pre>
+<pre>
+curl -X PATCH http://localhost:8080/centres/{centre-id}/employees/{employee-id}' -d {Patch-Body}
+**centre-id** is a path variable denoting the unique centre specific id with allowed values in positive, non-zero and long types
+**employee-id** is a path variable denoting the unique employee specific id with allowed values in positive, non-zero and long types
+**Patch-Body** is the dedicated patch body for the patch call.
+Sample PATCH Body:
+{
+    "id": 1,
+    "fullName": "Anushka Sharma",
+    "mobile": "9191919191",
+    "timeOfJoining": "2019-02-24T10:20:11.000+0000",
+    "husband": {
+                "fullName": "Virat Kohli",
+                "bslEmployeeId": "BSL-236799831"
+            },
+    "centre": 1,
+    "active": true,
+    "outstandingDue": 1500.7
+}
+**Note:** Should contain matching id (employee-id) and centre-id as in Path for internal validation.
+</pre>
+<pre>Request :</pre>
+<pre>
+curl -X PATCH http://localhost:8080/centres/1/employees/1' -d '{
+    "id": 1,
+    "fullName": "Anushka Sharma",
+    "mobile": "9191919191",
+    "timeOfJoining": "2019-02-24T10:20:11.000+0000",
+    "husband": {
+                "fullName": "Virat Kohli",
+                "bslEmployeeId": "BSL-236799831"
+            },
+    "centre": 1,
+    "active": true,
+    "outstandingDue": 1500.7
+}'
+</pre>
+<pre>Response :</pre>
+<pre>
+{
+    "id": 1,
+    "fullName": "Anushka Sharma",
+    "mobile": "9191919191",
+    "timeOfJoining": "2019-02-24T10:20:11.000+0000",
+    "husband": {
+        "fullName": "Virat Kohli",
+        "bslEmployeeId": "BSL-236799831"
+    },
+    "centre": 1,
+    "active": true,
+    "outstandingDue": 1500.7
 }
 </pre>
 

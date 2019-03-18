@@ -26,4 +26,8 @@ public class SpouseResponseDTO {
 	public void setBslEmployeeId(String bslEmployeeId) {
 		this.bslEmployeeId = bslEmployeeId;
 	}
+
+	public SpouseResponseDTO() {
+		super();
+	}
 }

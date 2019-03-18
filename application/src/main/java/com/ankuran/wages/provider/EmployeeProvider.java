@@ -11,4 +11,10 @@ public interface EmployeeProvider {
 	EmployeeResponseDTO fetchEmployeeByCentreIDAndEmployeeId(Long centreId, Long employeeId);
 
 	public List<EmployeeResponseDTO> fetchEmployeesByCentreID(Long centreId);
+	
+	Long addEmployee(EmployeeResponseDTO employeeResponseDTO);
+	
+	EmployeeResponseDTO deleteEmployeeByCentreIDAndEmployeeId(Long centreId, Long employeeId);
+	
+	EmployeeResponseDTO patchEmployeeByCentreIDAndEmployeeId(Long centreId, Long employeeId, EmployeeResponseDTO employeeResponseDTO);
 }

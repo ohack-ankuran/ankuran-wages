@@ -39,9 +39,48 @@ public class EmployerProviderImpl implements EmployeeProvider {
 
 	@Override
 	public List<EmployeeResponseDTO> fetchEmployeesByCentreID(Long centreId) {
-		List<EmployeeDao> employeeDaoList = employeeRepository.findAllByCentreId(centreId);
+		List<EmployeeDao> employeeDaoList = employeeRepository.findAllByCentreIdAndStatusNot(centreId, Byte.valueOf("0"));
 		List<EmployeeResponseDTO> employeeResponseDTOs = employeeDaoList.stream().filter(Objects::nonNull).map(x -> employeeMapper.mapEmployeeDaoToDTO(x)).collect(Collectors.toList());
 		return employeeResponseDTOs;
+	}
+
+	@Override
+	public Long addEmployee(EmployeeResponseDTO employeeResponseDTO) {
+		EmployeeDao employeeDao = employeeMapper.mapEmployeeDTOToDao(employeeResponseDTO);
+		employeeRepository.save(employeeDao);
+		return employeeDao.getId();
+	}
+
+	@Override
+	public EmployeeResponseDTO deleteEmployeeByCentreIDAndEmployeeId(Long centreId, Long employeeId) {
+		EmployeeDao employeeDao =  employeeRepository.findByCentreIdAndId(centreId, employeeId);
+		if (employeeDao != null && employeeDao.getStatus() != null && employeeDao.getStatus() > 0) {
+			employeeDao.setStatus(Byte.valueOf("0"));
+			employeeRepository.save(employeeDao);
+			EmployeeResponseDTO employeeResponseDTO = employeeMapper.mapEmployeeDaoToDTO(employeeDao);
+			return employeeResponseDTO;
+		} else {
+			return null;
+		}
+	}
+
+	@Override
+	public EmployeeResponseDTO patchEmployeeByCentreIDAndEmployeeId(Long centreId, Long employeeId, EmployeeResponseDTO employeeResponseDTO) {
+		EmployeeDao employeeDao =  employeeRepository.findByCentreIdAndId(centreId, employeeId);
+		if (employeeDao != null && employeeDao.getCentreId() != null && employeeDao.getCentreId().equals(employeeResponseDTO.getCentre())
+				&& employeeDao.getId() != null && employeeDao.getId().equals(employeeResponseDTO.getId())) {
+			EmployeeDao employeeDaoToPatch = employeeMapper.mapEmployeeDTOToDao(employeeResponseDTO);
+			employeeDaoToPatch.setJoiningTime(employeeDao.getJoiningTime());
+			employeeDaoToPatch.setId(employeeDao.getId());
+			//default is active inside mapper
+			if (employeeResponseDTO.getActive() != null && Boolean.FALSE.equals(employeeResponseDTO.getActive())) {
+				employeeDaoToPatch.setStatus(Byte.valueOf("0"));
+			}
+			employeeRepository.save(employeeDaoToPatch);
+			return employeeMapper.mapEmployeeDaoToDTO(employeeDaoToPatch);
+		} else {
+			return null;
+		}
 	}
 
 }

@@ -1,5 +1,7 @@
 package com.ankuran.wages.mapper;
 
+import java.util.Date;
+
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -38,4 +40,25 @@ public class EmployeeMapper {
 		return employeeDTO;
 	}
 
+	public EmployeeDao mapEmployeeDTOToDao(EmployeeResponseDTO employeeDTO) {
+		EmployeeDao employeeDao = new EmployeeDao();
+		if (employeeDTO != null && !StringUtils.isEmpty(employeeDTO.getFullName())) {
+			employeeDao.setFullName(employeeDTO.getFullName());
+			employeeDao.setCentreId(employeeDTO.getCentre());
+			employeeDao.setJoiningTime(new Date(System.currentTimeMillis()));
+			employeeDao.setStatus(Byte.valueOf("1"));
+			if (!StringUtils.isEmpty(employeeDTO.getMobile()))
+				employeeDao.setMobileNo(employeeDTO.getMobile());
+			if (employeeDTO.getHusband() != null) {
+				SpouseResponseDTO spouse = employeeDTO.getHusband();
+				if(!StringUtils.isEmpty(spouse.getBslEmployeeId())) {
+					employeeDao.setSpouseEmployeeId(spouse.getBslEmployeeId());
+				}
+				if(!StringUtils.isEmpty(spouse.getFullName())) {
+					employeeDao.setSpouseFullName(spouse.getFullName());
+				}
+			}
+		}
+		return employeeDao;
+	}
 }

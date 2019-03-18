@@ -23,4 +23,13 @@ public class OutstandingAmountResponseDTO {
 	public void setEmployeeId(Long employeeId) {
 		this.employeeId = employeeId;
 	}
+	public OutstandingAmountResponseDTO(Double outstandingDue, Long centreId, Long employeeId) {
+		super();
+		this.outstandingDue = outstandingDue;
+		this.centreId = centreId;
+		this.employeeId = employeeId;
+	}
+	public OutstandingAmountResponseDTO() {
+		super();
+	}
 }

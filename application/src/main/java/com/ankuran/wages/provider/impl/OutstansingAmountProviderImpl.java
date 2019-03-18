@@ -36,4 +36,24 @@ public class OutstansingAmountProviderImpl implements OutstandingAmountProvider 
 		return outstandingAmountDTOs;
 	}
 
+	@Override
+	public Long addOutstandingAmount(OutstandingAmountResponseDTO outstandingAmountResponseDTO) {
+		OutstandingAmountDao outstandingAmountDao = outstandingAmountMapper.mapOutstandingAmountDTOToDao(outstandingAmountResponseDTO);
+		outstandingAmountRepository.save(outstandingAmountDao);
+		return outstandingAmountDao.getId();
+	}
+
+	@Override
+	public Long patchOutstandingAmountByCentreIDAndEmployeeId(OutstandingAmountResponseDTO outstandingAmountResponseDTO) {
+		OutstandingAmountDao outstandingAmountDao = outstandingAmountRepository.findByCentreIdAndEmployeeId(outstandingAmountResponseDTO.getCentreId(), outstandingAmountResponseDTO.getEmployeeId());
+		//if exists->update, else create new.
+		if (outstandingAmountDao != null) {
+			outstandingAmountDao.setOutstanding_amount(outstandingAmountResponseDTO.getOutstandingDue());
+			outstandingAmountRepository.save(outstandingAmountDao);
+			return outstandingAmountDao.getId();
+		} else {
+			Long outstandingAmountId = addOutstandingAmount(outstandingAmountResponseDTO);
+			return outstandingAmountId;
+		}
+	}
 }
