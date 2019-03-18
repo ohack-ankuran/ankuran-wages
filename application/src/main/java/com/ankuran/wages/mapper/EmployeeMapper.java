@@ -1,7 +1,5 @@
 package com.ankuran.wages.mapper;
 
-import java.util.Date;
-
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -17,6 +15,8 @@ public class EmployeeMapper {
 		if (employeeDao != null) {
 			if(employeeDao.getStatus() != null && employeeDao.getStatus() > 0) {
 				employeeDTO.setActive(true);
+			} else {
+				employeeDTO.setActive(false);
 			}
 			if(employeeDao.getCentreId() != null) {
 				employeeDTO.setCentre(employeeDao.getCentreId());
@@ -45,7 +45,7 @@ public class EmployeeMapper {
 		if (employeeDTO != null && !StringUtils.isEmpty(employeeDTO.getFullName())) {
 			employeeDao.setFullName(employeeDTO.getFullName());
 			employeeDao.setCentreId(employeeDTO.getCentre());
-			employeeDao.setJoiningTime(new Date(System.currentTimeMillis()));
+			employeeDao.setJoiningTime(employeeDTO.getTimeOfJoining());
 			employeeDao.setStatus(Byte.valueOf("1"));
 			if (!StringUtils.isEmpty(employeeDTO.getMobile()))
 				employeeDao.setMobileNo(employeeDTO.getMobile());

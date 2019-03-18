@@ -76,7 +76,7 @@ public class EmployeeResourceImpl implements EmployeeResource {
 				return new ResponseEntity<EmployeeStoreResponseDTO>(HttpStatus.EXPECTATION_FAILED);
 			}
 		}
-		return new ResponseEntity<EmployeeStoreResponseDTO>(HttpStatus.FORBIDDEN);
+		return new ResponseEntity<EmployeeStoreResponseDTO>(HttpStatus.BAD_REQUEST);
 	}
 
 	@Override

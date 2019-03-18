@@ -140,20 +140,22 @@ curl -X POST http://localhost:8080/centres/{centre-id}/employees/' -d {Post-Body
 Sample POST Body:
 {
 	"fullName": "Devasena",
-	"mobile": "9494111222", 
+	"mobile": "9494111222",
+	"timeOfJoining": "2019-01-12T00:15:21.030Z",
 	"husband": {
 		"fullName": "Mahendra Bahubali",
 		"bslEmployeeId": "BSL-236799800"
 	},
 	"outstandingDue": 10000
 }
-**Note:** fullName in Post body is mandatory, rest are optional.
+**Note:** fullName and timeOfJoining in Post body are mandatory, rest are optional.
 </pre>
 <pre>Request :</pre>
 <pre>
 curl -X POST http://localhost:8080/centres/1/employees/' -d '{
 	"fullName": "Devasena",
 	"mobile": "9494111222",
+	"timeOfJoining": "2019-01-12T00:15:21.030Z",
 	"husband": {
 		"fullName": "Mahendra Bahubali",
 		"bslEmployeeId": "BSL-236799800"
@@ -232,7 +234,6 @@ Sample PATCH Body:
     "id": 1,
     "fullName": "Anushka Sharma",
     "mobile": "9191919191",
-    "timeOfJoining": "2019-02-24T10:20:11.000+0000",
     "husband": {
                 "fullName": "Virat Kohli",
                 "bslEmployeeId": "BSL-236799831"
@@ -249,7 +250,6 @@ curl -X PATCH http://localhost:8080/centres/1/employees/1' -d '{
     "id": 1,
     "fullName": "Anushka Sharma",
     "mobile": "9191919191",
-    "timeOfJoining": "2019-02-24T10:20:11.000+0000",
     "husband": {
                 "fullName": "Virat Kohli",
                 "bslEmployeeId": "BSL-236799831"
@@ -274,6 +274,7 @@ curl -X PATCH http://localhost:8080/centres/1/employees/1' -d '{
     "active": true,
     "outstandingDue": 1500.7
 }
+**Note:** The timeOfJoining will remain same for the joining time on that id.
 </pre>
 
 <h3>Extra Gyan</h3>

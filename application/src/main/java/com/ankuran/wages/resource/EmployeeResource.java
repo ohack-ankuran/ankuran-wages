@@ -32,5 +32,4 @@ public interface EmployeeResource {
     
     @PatchMapping("/{centreId}/employees/{employeeId}")
     public ResponseEntity<EmployeeResponseDTO> patchEmployee(@PathVariable("centreId") Long centreId, @PathVariable("employeeId") Long employeeId, @RequestBody EmployeeResponseDTO employee);
-    
 }
