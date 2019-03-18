@@ -14,7 +14,7 @@ import com.ankuran.wages.provider.OutstandingAmountProvider;
 import com.ankuran.wages.repository.OutstandingAmountRepository;
 
 @Component
-public class OutstansingAmountProviderImpl implements OutstandingAmountProvider {
+public class OutstandingAmountProviderImpl implements OutstandingAmountProvider {
 
 	@Autowired
 	OutstandingAmountRepository outstandingAmountRepository;
