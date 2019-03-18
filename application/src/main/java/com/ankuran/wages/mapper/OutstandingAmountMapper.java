@@ -29,7 +29,7 @@ public class OutstandingAmountMapper {
 				&& outstandingAmountResponseDTO.getEmployeeId() != null && outstandingAmountResponseDTO.getEmployeeId() > 0) {
 			outstandingAmountDao.setCentreId(outstandingAmountResponseDTO.getCentreId());
 			outstandingAmountDao.setEmployeeId(outstandingAmountResponseDTO.getEmployeeId());
-			if (outstandingAmountResponseDTO.getOutstandingDue() != null && outstandingAmountResponseDTO.getOutstandingDue() > 0) {
+			if (outstandingAmountResponseDTO.getOutstandingDue() != null) {
 				outstandingAmountDao.setOutstanding_amount(outstandingAmountResponseDTO.getOutstandingDue());
 			} else {
 				outstandingAmountDao.setOutstanding_amount(Double.valueOf(0));
