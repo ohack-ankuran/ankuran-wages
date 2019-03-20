@@ -1,5 +1,6 @@
 package com.ankuran.wages.provider.impl;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -25,7 +26,7 @@ public class EmployerProviderImpl implements EmployeeProvider {
 
     @Override
     public EmployeeResponseDTO fetchEmployeeByCentreIDAndFullName(Long centreId, String fullName) {
-        EmployeeDao employeeDao =  employeeRepository.findByCentreIdAndAndFullName(centreId, fullName);
+        EmployeeDao employeeDao =  employeeRepository.findByCentreIdAndFullName(centreId, fullName);
         EmployeeResponseDTO employeeResponseDTO = employeeMapper.mapEmployeeDaoToDTO(employeeDao);
         return employeeResponseDTO;
     }
@@ -39,13 +40,20 @@ public class EmployerProviderImpl implements EmployeeProvider {
 
 	@Override
 	public List<EmployeeResponseDTO> fetchEmployeesByCentreID(Long centreId) {
-		List<EmployeeDao> employeeDaoList = employeeRepository.findAllByCentreIdAndStatusNot(centreId, Byte.valueOf("0"));
+		List<EmployeeDao> employeeDaoList = employeeRepository.findAllByCentreIdAndStatusNotOrderByFullNameAsc(centreId, Byte.valueOf("0"));
 		List<EmployeeResponseDTO> employeeResponseDTOs = employeeDaoList.stream().filter(Objects::nonNull).map(x -> employeeMapper.mapEmployeeDaoToDTO(x)).collect(Collectors.toList());
 		return employeeResponseDTOs;
 	}
 
 	@Override
 	public Long addEmployee(EmployeeResponseDTO employeeResponseDTO) {
+		Date lowerTimeOfJoining = new Date(employeeResponseDTO.getTimeOfJoining().getTime() - 10000);
+		Date upperTimeOfJoining = new Date(employeeResponseDTO.getTimeOfJoining().getTime() + 10000);
+		EmployeeDao existingEmployeeDao = employeeRepository.findByCentreIdAndFullNameAndJoiningTimeBetween(employeeResponseDTO.getCentre(),
+				employeeResponseDTO.getFullName(), lowerTimeOfJoining, upperTimeOfJoining);
+		if (existingEmployeeDao != null && existingEmployeeDao.getId() != null && existingEmployeeDao.getId() > 0) {
+			return Long.valueOf(0);
+		}
 		EmployeeDao employeeDao = employeeMapper.mapEmployeeDTOToDao(employeeResponseDTO);
 		employeeRepository.save(employeeDao);
 		return employeeDao.getId();

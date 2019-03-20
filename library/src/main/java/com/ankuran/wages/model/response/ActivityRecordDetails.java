@@ -1,11 +1,18 @@
 package com.ankuran.wages.model.response;
 
-public class ActivityMoneyMovementDetails {
+public class ActivityRecordDetails {
 
+	private String id;
 	private String note;
 	private Double amount;
-	private String id;
+	private EmployeeResponseDTO recipient;
 	
+	public EmployeeResponseDTO getRecipient() {
+		return recipient;
+	}
+	public void setRecipient(EmployeeResponseDTO recipient) {
+		this.recipient = recipient;
+	}
 	public String getId() {
 		return id;
 	}

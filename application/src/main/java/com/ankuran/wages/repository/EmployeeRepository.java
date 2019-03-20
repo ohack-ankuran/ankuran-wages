@@ -1,5 +1,6 @@
 package com.ankuran.wages.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,8 +14,9 @@ import com.ankuran.wages.model.EmployeeDao;
  */
 @Repository
 public interface EmployeeRepository extends JpaRepository<EmployeeDao, Long> {
-    public EmployeeDao findByCentreIdAndAndFullName(Long centreId, String fullName);
+    public EmployeeDao findByCentreIdAndFullName(Long centreId, String fullName);
     public EmployeeDao findByCentreIdAndId(Long centreId, Long id);
-	public List<EmployeeDao> findAllByCentreId(Long centreId);
-	public List<EmployeeDao> findAllByCentreIdAndStatusNot(Long centreId, Byte status);
+	public List<EmployeeDao> findAllByCentreIdOrderByFullNameAsc(Long centreId);
+	public List<EmployeeDao> findAllByCentreIdAndStatusNotOrderByFullNameAsc(Long centreId, Byte status);
+	public EmployeeDao findByCentreIdAndFullNameAndJoiningTimeBetween(Long centreId, String fullName, Date lowerJoiningTime, Date upperJoiningTime);
 }

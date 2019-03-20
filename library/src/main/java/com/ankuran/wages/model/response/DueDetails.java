@@ -4,12 +4,21 @@ import java.util.List;
 
 import com.ankuran.wages.enums.EmployeeActivityEnum;
 
-public class DueDetails extends ActivityMoneyMovementDetails {
+public class DueDetails extends ActivityRecordDetails {
+
+	private String id;
 	private EmployeeActivityEnum.DueDistributionType distributionType;
 	private Long quantity;
 	private Double duePerItem;
 	private ItemDetails item;
 	private List<EmployeeShare> distribution;
+	
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	public EmployeeActivityEnum.DueDistributionType getDistributionType() {
 		return distributionType;
 	}

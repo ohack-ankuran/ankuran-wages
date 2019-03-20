@@ -75,6 +75,8 @@ public class EmployeeResourceImpl implements EmployeeResource {
 			} else {
 				return new ResponseEntity<EmployeeStoreResponseDTO>(HttpStatus.EXPECTATION_FAILED);
 			}
+		} else if (employeeId != null && employeeId == 0) {
+			return new ResponseEntity<EmployeeStoreResponseDTO>(HttpStatus.CONFLICT);
 		}
 		return new ResponseEntity<EmployeeStoreResponseDTO>(HttpStatus.BAD_REQUEST);
 	}

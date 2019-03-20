@@ -9,4 +9,8 @@ public class EmployeeActivityEnum {
 	public enum DueDistributionType {
 		INDIVIDUAL, GROUP
 	}
+	
+	public enum ActivityStatus {
+		CORRECT, INCORRECT, DELETED
+	}
 }
