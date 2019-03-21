@@ -24,7 +24,7 @@ public class WagesActivityDao {
     private Long id;
     
     @Column(name = "wages_activity_key")
-    private BigInteger wagesActivityKey;
+    private Long wagesActivityKey;
 
     @Column(name = "employee_id")
     private Long employeeId;
@@ -90,11 +90,11 @@ public class WagesActivityDao {
 		this.timeCreated = timeCreated;
 	}
 
-	public BigInteger getWagesActivityKey() {
+	public Long getWagesActivityKey() {
         return wagesActivityKey;
     }
 
-    public void setWagesActivityKey(BigInteger wagesActivityKey) {
+    public void setWagesActivityKey(Long wagesActivityKey) {
         this.wagesActivityKey = wagesActivityKey;
     }
 
