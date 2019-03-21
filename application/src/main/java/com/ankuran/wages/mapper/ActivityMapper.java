@@ -36,7 +36,7 @@ public class ActivityMapper {
 		WagesActivityDao wagesActivityDao = new WagesActivityDao();
 		wagesActivityDao.setCentreId(centreId);
 		wagesActivityDao.setEmployeeId(employeeId);
-		wagesActivityDao.setWagesActivityKey(getWagesActivityKey(activity.getTimeCreated().getTime(), centreId, employeeId));
+		wagesActivityDao.setWagesActivityKey(getWagesActivityKey(activity.getTimeCreated().getTime(), centreId, employeeId).longValueExact());
 		wagesActivityDao.setTimeCreated(activity.getTimeCreated());
 		wagesActivityDao.setStatus(Long.valueOf(ACTIVITY_STATUS_CORRECT));
 		wagesActivityDao.setChanged(Byte.valueOf("0"));
@@ -112,7 +112,7 @@ public class ActivityMapper {
 		wageActivity.setGroupWageId(groupWageId);
 		wageActivity.setCentreId(baseWageActivity.getCentreId());
 		wageActivity.setTimeCreated(baseWageActivity.getTimeCreated());
-		wageActivity.setWagesActivityKey(getWagesActivityKey(baseWageActivity.getTimeCreated().getTime(), baseWageActivity.getCentreId(), employeeId));
+		wageActivity.setWagesActivityKey(getWagesActivityKey(baseWageActivity.getTimeCreated().getTime(), baseWageActivity.getCentreId(), employeeId).longValueExact());
 		wageActivity.setStatus(baseWageActivity.getStatus());
 		wageActivity.setChanged(baseWageActivity.getChanged());
 		
@@ -132,7 +132,7 @@ public class ActivityMapper {
 		} else { 
 			activity.setChangeHistory(false);
 		}
-		activity.setId(wagesActivityDao.getWagesActivityKey());
+		activity.setId(BigInteger.valueOf(wagesActivityDao.getWagesActivityKey()));
 		activity.setStatus(getStatus(wagesActivityDao.getStatus()));
 		activity.setTimeCreated(wagesActivityDao.getTimeCreated());
 		activity.setType(getType(wagesActivityDao.getType()));
@@ -153,6 +153,11 @@ public class ActivityMapper {
 			item.setId(wagesActivityDao.getItemId());
 			item.setName(wagesActivityDao.getItemName());
 			dueDetails.setItem(item);
+			
+			EmployeeResponseDTO employee = new EmployeeResponseDTO();
+			employee.setCentre(wagesActivityDao.getCentreId());
+			employee.setId(wagesActivityDao.getEmployeeId());
+			dueDetails.setRecipient(employee);
 			
 			activity.setDueDetails(dueDetails);
 			
@@ -200,13 +205,13 @@ public class ActivityMapper {
 		List<EmployeeShare> distribution = new ArrayList<>();
 		for (WagesActivityDao wageActivity : wageActivities) {
 			EmployeeResponseDTO employee = new EmployeeResponseDTO();
-			employee.setId(wageActivity.getId());
+			employee.setId(wageActivity.getEmployeeId());
 			employee.setCentre(wageActivity.getCentreId());
 			
 			EmployeeShare employeeShare = new EmployeeShare();
 			employeeShare.setAmount(wageActivity.getTotalAmount());
 			employeeShare.setEmployee(employee);
-			employeeShare.setId(wageActivity.getWagesActivityKey());
+			employeeShare.setId(BigInteger.valueOf(wageActivity.getWagesActivityKey()));
 			
 			distribution.add(employeeShare);
 		}
@@ -242,8 +247,8 @@ public class ActivityMapper {
 	private BigInteger getWagesActivityKey(long time, long centreId, long employeeId) {
 		BigInteger wagesActivityKey = new BigInteger("0");
 
-		wagesActivityKey = BigInteger.valueOf(time).shiftLeft(72);
-		wagesActivityKey = wagesActivityKey.add(BigInteger.valueOf(centreId).shiftLeft(64));
+		wagesActivityKey = BigInteger.valueOf(time).shiftLeft(14);
+		wagesActivityKey = wagesActivityKey.add(BigInteger.valueOf(centreId).shiftLeft(10));
 		wagesActivityKey = wagesActivityKey.add(BigInteger.valueOf(employeeId));
 		
 		return wagesActivityKey;

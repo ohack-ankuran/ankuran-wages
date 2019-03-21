@@ -6,6 +6,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 
 import com.ankuran.wages.enums.EmployeeActivityEnum.ActivityType;
 import com.ankuran.wages.enums.EmployeeActivityEnum.DueDistributionType;
@@ -19,6 +20,7 @@ import com.ankuran.wages.provider.EmployeeProvider;
 import com.ankuran.wages.provider.OutstandingAmountProvider;
 import com.ankuran.wages.resource.ActivitiesResource;
 
+@Component
 public class ActivitiesResourceImpl implements ActivitiesResource {
 	
 	@Autowired
