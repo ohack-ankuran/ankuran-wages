@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.ankuran.wages.model.response.ItemResponseDTO;
 import com.ankuran.wages.model.response.ItemStoreResponseDTO;
+import com.ankuran.wages.model.response.ItemsResponseDTO;
 
 @Controller
 @RequestMapping(path="/catalogue")
@@ -20,5 +21,8 @@ public interface ItemResource {
 	
 	@GetMapping(path="/products/{productId}")
 	public ResponseEntity<ItemResponseDTO> getProduct(@PathVariable Long productId);
+	
+	@GetMapping(path="/products")
+	public ResponseEntity<ItemsResponseDTO> getAllProducts();
 	
 }

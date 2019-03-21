@@ -154,6 +154,11 @@ public class ActivityMapper {
 			item.setName(wagesActivityDao.getItemName());
 			dueDetails.setItem(item);
 			
+			EmployeeResponseDTO employee = new EmployeeResponseDTO();
+			employee.setCentre(wagesActivityDao.getCentreId());
+			employee.setId(wagesActivityDao.getEmployeeId());
+			dueDetails.setRecipient(employee);
+			
 			activity.setDueDetails(dueDetails);
 			
 		} else if (ActivityType.PAYMENT.equals(activity.getType())) {

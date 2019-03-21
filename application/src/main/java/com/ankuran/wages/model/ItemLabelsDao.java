@@ -25,8 +25,8 @@ public class ItemLabelsDao {
     @Column(name = "item_id")
     private Long itemId;
     
-    @Column(name = "key")
-    private String key;
+    @Column(name = "value_type")
+    private String valueType;
     
     @Column(name = "value")
     private String value;
@@ -80,12 +80,13 @@ public class ItemLabelsDao {
 		this.itemId = itemId;
 	}
 
-	public String getKey() {
-		return key;
+
+	public String getValueType() {
+		return valueType;
 	}
 
-	public void setKey(String key) {
-		this.key = key;
+	public void setValueType(String valueType) {
+		this.valueType = valueType;
 	}
 
 	public String getValue() {
