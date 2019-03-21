@@ -152,7 +152,7 @@ public class ActivitiesResourceImpl implements ActivitiesResource {
 			Date lower = datefrom(upper, DEFAULT_TIME_RANGE_IN_DAYS);
 			return Pair.of(lower, upper);
 		} else if(lowerTimeCreated == null) {
-			Date lower = datefrom(upperTimeCreated, -10);
+			Date lower = datefrom(upperTimeCreated, DEFAULT_TIME_RANGE_IN_DAYS);
 			return Pair.of(lower, upperTimeCreated);
 		} else if(upperTimeCreated == null) {
 			Date upper = Date.from(Instant.now());
