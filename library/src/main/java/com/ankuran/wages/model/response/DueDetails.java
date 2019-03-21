@@ -10,7 +10,7 @@ public class DueDetails extends ActivityRecordDetails {
 	private EmployeeActivityEnum.DueDistributionType distributionType;
 	private Long quantity;
 	private Double duePerItem;
-	private ItemDetails item;
+	private ItemResponseDTO item;
 	private List<EmployeeShare> distribution;
 	
 	public String getId() {
@@ -37,10 +37,10 @@ public class DueDetails extends ActivityRecordDetails {
 	public void setDuePerItem(Double duePerItem) {
 		this.duePerItem = duePerItem;
 	}
-	public ItemDetails getItem() {
+	public ItemResponseDTO getItem() {
 		return item;
 	}
-	public void setItem(ItemDetails item) {
+	public void setItem(ItemResponseDTO item) {
 		this.item = item;
 	}
 	public List<EmployeeShare> getDistribution() {

@@ -15,7 +15,7 @@ import com.ankuran.wages.model.response.ActivityResponseDTO;
 import com.ankuran.wages.model.response.DueDetails;
 import com.ankuran.wages.model.response.EmployeeResponseDTO;
 import com.ankuran.wages.model.response.EmployeeShare;
-import com.ankuran.wages.model.response.ItemDetails;
+import com.ankuran.wages.model.response.ItemResponseDTO;
 import com.ankuran.wages.model.response.PaymentDetails;
 
 @Component
@@ -45,7 +45,7 @@ public class ActivityMapper {
 			DueDetails dueDetails = activity.getDueDetails();
 			wagesActivityDao.setType(Long.valueOf(ACTIVITY_TYPE_DUE));
 			if (dueDetails.getItem() != null) {
-				ItemDetails itemDetails = dueDetails.getItem();
+				ItemResponseDTO itemDetails = dueDetails.getItem();
 				wagesActivityDao.setItemId(itemDetails.getId());
 				wagesActivityDao.setItemName(itemDetails.getName());
 			}
@@ -81,7 +81,7 @@ public class ActivityMapper {
 			groupWagesActivityDao.setItemQuantity(dueDetails.getQuantity());
 			groupWagesActivityDao.setTotalAmount(dueDetails.getAmount());
 			
-			ItemDetails item = dueDetails.getItem();
+			ItemResponseDTO item = dueDetails.getItem();
 			if (item != null) {
 				groupWagesActivityDao.setItemId(item.getId());
 				groupWagesActivityDao.setItemName(item.getName());
@@ -149,7 +149,7 @@ public class ActivityMapper {
 				dueDetails.setDistributionType(DueDistributionType.INDIVIDUAL);
 			}
 			
-			ItemDetails item = new ItemDetails();
+			ItemResponseDTO item = new ItemResponseDTO();
 			item.setId(wagesActivityDao.getItemId());
 			item.setName(wagesActivityDao.getItemName());
 			dueDetails.setItem(item);
@@ -197,7 +197,7 @@ public class ActivityMapper {
 		dueDetails.setId(String.valueOf(groupWage.getId()));
 		dueDetails.setQuantity(groupWage.getItemQuantity());
 		
-		ItemDetails item = new ItemDetails();
+		ItemResponseDTO item = new ItemResponseDTO();
 		item.setName(groupWage.getItemName());
 		item.setId(groupWage.getItemId());
 		dueDetails.setItem(item);
@@ -227,6 +227,16 @@ public class ActivityMapper {
 			return ActivityType.DUE;
 		} else if (type != null && type == ACTIVITY_TYPE_PAYMENT) {
 			return ActivityType.PAYMENT;
+		} else {
+			return null;
+		}
+	}
+	
+	public Integer getValue(ActivityType type) {
+		if (type != null && type == ActivityType.DUE) {
+			return ACTIVITY_TYPE_DUE;
+		} else if (type != null && type == ActivityType.PAYMENT) {
+			return ACTIVITY_TYPE_PAYMENT;
 		} else {
 			return null;
 		}

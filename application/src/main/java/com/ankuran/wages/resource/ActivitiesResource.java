@@ -1,6 +1,8 @@
 package com.ankuran.wages.resource;
 
 import java.math.BigInteger;
+import java.text.ParseException;
+import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ankuran.wages.model.response.ActivityResponseDTO;
 import com.ankuran.wages.model.response.ActivityStoreResponseDTO;
@@ -25,6 +28,13 @@ public interface ActivitiesResource {
 	
 	@GetMapping(path="/{employeeId}/activities/{activityId}")
 	public ResponseEntity<ActivityResponseDTO> getIndividualActivity(@PathVariable("centreId") Long centreId, @PathVariable("employeeId") Long employeeId, @PathVariable("activityId") BigInteger activityId);
+	
+	@GetMapping(path="/{employeeId}/activities")
+	public ResponseEntity<List<ActivityResponseDTO>> getActivities(@PathVariable("centreId") Long centreId, 
+			@PathVariable("employeeId") Long employeeId, 
+			@RequestParam(value="lowerTimeCreated", required=false) String lowerTimeCreated,
+			@RequestParam(value="upperTimeCreated", required=false) String upperTimeCreated,
+			@RequestParam(value="types", required=false) List<String> types) throws ParseException;
 	
 	@GetMapping(path="/activities/{activityId}")
 	public ResponseEntity<ActivityResponseDTO> getGroupActivity(@PathVariable("centreId") Long centreId, @PathVariable("employeeId") Long employeeId, @PathVariable("activityId") BigInteger activityId);
