@@ -18,11 +18,7 @@ public class ItemMapper {
 		itemsDao.setName(itemResponseDTO.getName());
 		itemsDao.setPicture(itemResponseDTO.getPicture());
 		itemsDao.setCategory(itemResponseDTO.getType());
-		if (itemResponseDTO.getActive() != null && Boolean.TRUE.equals(itemResponseDTO.getActive())) { 
-				itemsDao.setStatus(Long.valueOf(1));
-		} else {
-			itemsDao.setStatus(Long.valueOf(0));
-		}
+		itemsDao.setStatus(Long.valueOf(1));
 		itemsDao.setTimeCreated(itemResponseDTO.getTimeCreated());
 		if (itemResponseDTO.getAddedBy() != null) {
 			itemsDao.setActorEmployeeId(itemResponseDTO.getAddedBy().getId());
