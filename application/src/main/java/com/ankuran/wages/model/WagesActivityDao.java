@@ -2,8 +2,12 @@ package com.ankuran.wages.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import java.math.BigInteger;
 import java.util.Date;
 
 /**
@@ -15,20 +19,21 @@ import java.util.Date;
 public class WagesActivityDao {
 
     @Id
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", updatable = false, nullable = false)
     private Long id;
-
+    
     @Column(name = "wages_activity_key")
-    private Long wagesActivityKey;
+    private BigInteger wagesActivityKey;
 
     @Column(name = "employee_id")
     private Long employeeId;
+    
+    @Column(name = "time_created")
+    private Date timeCreated;
 
     @Column(name = "centre_id")
     private Long centreId;
-
-    @Column(name = "activity_id")
-    private Long activityId;
 
     @Column(name = "linked_activity_id")
     private Long linkedActivityId;
@@ -46,13 +51,13 @@ public class WagesActivityDao {
     private Double duePerItem;
 
     @Column(name = "item_quantity")
-    private Integer itemQuantity;
+    private Long itemQuantity;
 
     @Column(name = "total_amount")
     private Double totalAmount;
 
     @Column(name = "changed")
-    private Integer changed;
+    private Byte changed;
 
     @Column(name = "misc_info")
     private String miscInfo;
@@ -60,28 +65,36 @@ public class WagesActivityDao {
     @Column(name = "actor_employee_id")
     private Integer actorEmployeeId;
 
-    @Column(name = "created_at")
-    private Date createdAt;
-
-    @Column(name = "updated_at")
-    private Date updatedAt;
+    @Column(name = "time_updated")
+    private Date timeUpdated;
 
     @Column(name = "status")
-    private Byte status;
-
+    private Long status;
+    
+    @Column(name = "group_wage_id")
+    private Long groupWageId;
+    
     public Long getId() {
-        return id;
-    }
+		return id;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public Long getWagesActivityKey() {
+	public Date getTimeCreated() {
+		return timeCreated;
+	}
+
+	public void setTimeCreated(Date timeCreated) {
+		this.timeCreated = timeCreated;
+	}
+
+	public BigInteger getWagesActivityKey() {
         return wagesActivityKey;
     }
 
-    public void setWagesActivityKey(Long wagesActivityKey) {
+    public void setWagesActivityKey(BigInteger wagesActivityKey) {
         this.wagesActivityKey = wagesActivityKey;
     }
 
@@ -99,14 +112,6 @@ public class WagesActivityDao {
 
     public void setCentreId(Long centreId) {
         this.centreId = centreId;
-    }
-
-    public Long getActivityId() {
-        return activityId;
-    }
-
-    public void setActivityId(Long activityId) {
-        this.activityId = activityId;
     }
 
     public Long getLinkedActivityId() {
@@ -149,11 +154,11 @@ public class WagesActivityDao {
         this.duePerItem = duePerItem;
     }
 
-    public Integer getItemQuantity() {
+    public Long getItemQuantity() {
         return itemQuantity;
     }
 
-    public void setItemQuantity(Integer itemQuantity) {
+    public void setItemQuantity(Long itemQuantity) {
         this.itemQuantity = itemQuantity;
     }
 
@@ -165,11 +170,11 @@ public class WagesActivityDao {
         this.totalAmount = totalAmount;
     }
 
-    public Integer getChanged() {
+    public Byte getChanged() {
         return changed;
     }
 
-    public void setChanged(Integer changed) {
+    public void setChanged(Byte changed) {
         this.changed = changed;
     }
 
@@ -189,27 +194,27 @@ public class WagesActivityDao {
         this.actorEmployeeId = actorEmployeeId;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
-    }
+    public Date getTimeUpdated() {
+		return timeUpdated;
+	}
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
+	public void setTimeUpdated(Date timeUpdated) {
+		this.timeUpdated = timeUpdated;
+	}
 
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public Byte getStatus() {
+	public Long getStatus() {
         return status;
     }
 
-    public void setStatus(Byte status) {
+    public void setStatus(Long status) {
         this.status = status;
     }
+
+	public Long getGroupWageId() {
+		return groupWageId;
+	}
+
+	public void setGroupWageId(Long groupWageId) {
+		this.groupWageId = groupWageId;
+	}
 }

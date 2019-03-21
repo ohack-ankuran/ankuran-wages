@@ -30,6 +30,7 @@
     <properties>
         <java.version>1.8</java.version>
         <library.version>0.1-SNAPSHOT</library.version>
+        <version.apache.collections>4.3</version.apache.collections>
     </properties>
 
     <dependencies>
@@ -91,6 +92,16 @@
             <groupId>com.ankuran.wages</groupId>
             <artifactId>library</artifactId>
             <version>${library.version}</version>
+        </dependency>
+        
+        <dependency>
+        	<groupId>org.apache.commons</groupId>
+        	<artifactId>commons-lang3</artifactId>
+        </dependency>
+        <dependency>
+        	<groupId>org.apache.commons</groupId>
+        	<artifactId>commons-collections4</artifactId>
+        	<version>${version.apache.collections}</version>
         </dependency>
     </dependencies>
 

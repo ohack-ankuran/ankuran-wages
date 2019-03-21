@@ -1,10 +1,13 @@
 package com.ankuran.wages.model;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.Date;
 
 /**
  * @author Sushil Mittal.
@@ -15,7 +18,8 @@ import java.util.Date;
 public class EmployeeDao {
 
     @Id
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", updatable = false, nullable = false)
     private Long id;
 
     @Column(name = "full_name")
@@ -34,14 +38,10 @@ public class EmployeeDao {
     private String spouseEmployeeId;
 
     @Column(name = "centre")
-    private Long centerId;
+    private Long centreId;
 
     @Column(name = "status")
     private Byte status;
-
-    @Column(name = "created_at")
-    private Date createdAt;
-
 
     public Long getId() {
         return id;
@@ -91,12 +91,12 @@ public class EmployeeDao {
         this.spouseEmployeeId = spouseEmployeeId;
     }
 
-    public Long getCenterId() {
-        return centerId;
+    public Long getCentreId() {
+        return centreId;
     }
 
-    public void setCenterId(Long centerId) {
-        this.centerId = centerId;
+    public void setCentreId(Long centreId) {
+        this.centreId = centreId;
     }
 
     public Byte getStatus() {
@@ -105,13 +105,5 @@ public class EmployeeDao {
 
     public void setStatus(Byte status) {
         this.status = status;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
     }
 }

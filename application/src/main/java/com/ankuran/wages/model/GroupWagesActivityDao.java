@@ -2,6 +2,8 @@ package com.ankuran.wages.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Date;
@@ -15,7 +17,8 @@ import java.util.Date;
 public class GroupWagesActivityDao {
 
     @Id
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", updatable = false, nullable = false)
     private Long id;
 
     @Column(name = "linked_activity_id")
@@ -30,14 +33,14 @@ public class GroupWagesActivityDao {
     @Column(name = "item_name")
     private String itemName;
 
-    @Column(name = "price_per_item")
-    private Long pricePerItem;
+    @Column(name = "due_per_item")
+    private Double duePerItem;
 
     @Column(name = "item_quantity")
     private Long itemQuantity;
 
     @Column(name = "total_amount")
-    private Long totalAmount;
+    private Double totalAmount;
 
     @Column(name = "misc_info")
     private String miscInfo;
@@ -48,14 +51,14 @@ public class GroupWagesActivityDao {
     @Column(name = "changed")
     private Byte changed;
 
-    @Column(name = "created_at")
-    private Date createdAt;
+    @Column(name = "time_created")
+    private Date timeCreated;
 
-    @Column(name = "updated_at")
-    private Date updatedAt;
+    @Column(name = "time_updated")
+    private Date timeUpdated;
 
     @Column(name = "status")
-    private Byte status;
+    private Integer status;
 
     public Long getId() {
         return id;
@@ -97,12 +100,12 @@ public class GroupWagesActivityDao {
         this.itemName = itemName;
     }
 
-    public Long getPricePerItem() {
-        return pricePerItem;
+    public Double getDuePerItem() {
+        return duePerItem;
     }
 
-    public void setPricePerItem(Long pricePerItem) {
-        this.pricePerItem = pricePerItem;
+    public void setDuePerItem(Double duePerItem) {
+        this.duePerItem = duePerItem;
     }
 
     public Long getItemQuantity() {
@@ -113,11 +116,11 @@ public class GroupWagesActivityDao {
         this.itemQuantity = itemQuantity;
     }
 
-    public Long getTotalAmount() {
+    public Double getTotalAmount() {
         return totalAmount;
     }
 
-    public void setTotalAmount(Long totalAmount) {
+    public void setTotalAmount(Double totalAmount) {
         this.totalAmount = totalAmount;
     }
 
@@ -145,27 +148,27 @@ public class GroupWagesActivityDao {
         this.changed = changed;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
-    }
+    public Date getTimeCreated() {
+		return timeCreated;
+	}
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
+	public void setTimeCreated(Date timeCreated) {
+		this.timeCreated = timeCreated;
+	}
 
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
+	public Date getTimeUpdated() {
+		return timeUpdated;
+	}
 
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
+	public void setTimeUpdated(Date timeUpdated) {
+		this.timeUpdated = timeUpdated;
+	}
 
-    public Byte getStatus() {
+	public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Byte status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 }

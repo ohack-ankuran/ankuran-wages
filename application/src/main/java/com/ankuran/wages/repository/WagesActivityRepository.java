@@ -1,11 +1,15 @@
 package com.ankuran.wages.repository;
 
-import com.ankuran.wages.model.WagesActivityDao;
+import java.util.Date;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.ankuran.wages.model.WagesActivityDao;
 
 /**
  * @author Sushil Mittal.
  * @Created At 12/03/19.
  */
 public interface WagesActivityRepository extends JpaRepository<WagesActivityDao, Long> {
+	public WagesActivityDao findByCentreIdAndEmployeeIdAndTimeCreatedBetween(Long centreId, Long employeeId, Date lowerTimeCreated, Date upperTimeCreated);
 }

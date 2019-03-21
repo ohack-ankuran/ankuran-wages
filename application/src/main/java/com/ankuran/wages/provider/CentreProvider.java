@@ -1,9 +1,12 @@
 package com.ankuran.wages.provider;
 
-import com.ankuran.wages.model.request.SampleRequest;
+import java.util.List;
+
 import com.ankuran.wages.model.response.CentreResponseDTO;
 
 public interface CentreProvider {
 
-    public CentreResponseDTO fetchCentreByName(String centreName);
+    public CentreResponseDTO fetchCentreById(long centreId);
+
+	public List<CentreResponseDTO> fetchCentres();
 }
