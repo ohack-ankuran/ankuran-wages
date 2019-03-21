@@ -24,6 +24,22 @@ public class ActivityStoreResponseDTO {
 		this.id = activityId.toString();
 		this.links = getLinks(String.valueOf(centreId), String.valueOf(employeeId), activityId.toString());
 	}
+	
+	public ActivityStoreResponseDTO(Long centreId, BigInteger groupActivityId) {
+		super();
+		this.id = groupActivityId.toString();
+		this.links = getLinks(centreId, groupActivityId);
+	}
+	
+	private List<LinksDTO> getLinks(Long centreId, BigInteger groupActivityId) {
+		List<LinksDTO> links = new ArrayList<LinksDTO>();
+		links.add(new LinksDTO(centreId, groupActivityId, "GET"));
+		links.add(new LinksDTO(centreId, groupActivityId, "PUT"));
+		links.add(new LinksDTO(centreId, groupActivityId, "PATCH"));
+		links.add(new LinksDTO(centreId, groupActivityId, "DELETE"));
+		return links; 
+	}
+	
 	private List<LinksDTO> getLinks(String centreId, String employeeId, String activityId) {
 		List<LinksDTO> links = new ArrayList<LinksDTO>();
 		links.add(new LinksDTO(centreId, employeeId, activityId, "GET"));

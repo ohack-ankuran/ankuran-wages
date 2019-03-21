@@ -32,11 +32,11 @@ public class ActivityMapper {
 	public static final int ACTIVITY_STATUS_INCORRECT = 2;
 	public static final int ACTIVITY_STATUS_DELETED = 3;
 
-	public WagesActivityDao mapActivityRequestToIndividualWagesDao(Long centreId, Long employeeId, ActivityResponseDTO activity, BigInteger wagesActivityKey) {
+	public WagesActivityDao mapActivityRequestToIndividualWagesDao(Long centreId, Long employeeId, ActivityResponseDTO activity) {
 		WagesActivityDao wagesActivityDao = new WagesActivityDao();
 		wagesActivityDao.setCentreId(centreId);
 		wagesActivityDao.setEmployeeId(employeeId);
-		wagesActivityDao.setWagesActivityKey(wagesActivityKey);
+		wagesActivityDao.setWagesActivityKey(getWagesActivityKey(activity.getTimeCreated().getTime(), centreId, employeeId));
 		wagesActivityDao.setTimeCreated(activity.getTimeCreated());
 		wagesActivityDao.setStatus(Long.valueOf(ACTIVITY_STATUS_CORRECT));
 		wagesActivityDao.setChanged(Byte.valueOf("0"));
@@ -63,7 +63,7 @@ public class ActivityMapper {
 		return wagesActivityDao;
 	}
 	
-	public GroupWagesActivityDao mapActivityRequestToGroupWagesDao(Long centreId, Long employeeId, ActivityResponseDTO activity, BigInteger wagesActivityKey) {
+	public GroupWagesActivityDao mapGroupActivityRequestToGroupWagesDao(Long centreId, ActivityResponseDTO activity) {
 		GroupWagesActivityDao groupWagesActivityDao = new GroupWagesActivityDao();
 		/*
 		 * Type will be DUE and distribution type will be GROUP by default if reading from Group schema
@@ -91,27 +91,28 @@ public class ActivityMapper {
 		return groupWagesActivityDao;
 	}
 	
-	public List<WagesActivityDao> mapGroupActivityRequestToMultiIndividualWagesDao(Long centreId, Long employeeId, ActivityResponseDTO activity, BigInteger wagesActivityKey) {
+	public List<WagesActivityDao> mapGroupActivityRequestToMultiIndividualWagesDao(Long centreId, ActivityResponseDTO activity, Long groupWageId) {
 		List<WagesActivityDao> wageActivities = new ArrayList<WagesActivityDao>();
 		List<EmployeeShare> employeeShares = activity.getDueDetails().getDistribution();
-		WagesActivityDao baseWageActivity = mapActivityRequestToIndividualWagesDao(centreId, employeeId, activity, wagesActivityKey);
+		WagesActivityDao baseWageActivity = mapActivityRequestToIndividualWagesDao(centreId, Long.valueOf(0), activity);
 		for (EmployeeShare employeeShare : employeeShares) {
 			if (employeeShare.getAmount() != null && employeeShare.getAmount() > 0 
 					&& employeeShare.getEmployee() != null && employeeShare.getEmployee().getId() != null && employeeShare.getEmployee().getId() > 0) {
-				WagesActivityDao wageActivityDao = copyBaseWageActivityWith(baseWageActivity, employeeShare.getAmount(), employeeShare.getEmployee().getId());
+				WagesActivityDao wageActivityDao = copyBaseWageActivityWith(baseWageActivity, employeeShare.getAmount(), employeeShare.getEmployee().getId(), groupWageId);
 				wageActivities.add(wageActivityDao);
 			}
 		}
 		
 		return wageActivities;
 	}
-	private WagesActivityDao copyBaseWageActivityWith(WagesActivityDao baseWageActivity, Double amount, Long id) {
+	private WagesActivityDao copyBaseWageActivityWith(WagesActivityDao baseWageActivity, Double amount, Long employeeId, Long groupWageId) {
 		WagesActivityDao wageActivity = new WagesActivityDao();
-		wageActivity.setEmployeeId(id);
+		wageActivity.setEmployeeId(employeeId);
 		wageActivity.setTotalAmount(amount);
+		wageActivity.setGroupWageId(groupWageId);
 		wageActivity.setCentreId(baseWageActivity.getCentreId());
 		wageActivity.setTimeCreated(baseWageActivity.getTimeCreated());
-		wageActivity.setWagesActivityKey(getWagesActivityKey(baseWageActivity.getTimeCreated().getTime(), baseWageActivity.getCentreId(), id));
+		wageActivity.setWagesActivityKey(getWagesActivityKey(baseWageActivity.getTimeCreated().getTime(), baseWageActivity.getCentreId(), employeeId));
 		wageActivity.setStatus(baseWageActivity.getStatus());
 		wageActivity.setChanged(baseWageActivity.getChanged());
 		
@@ -172,7 +173,49 @@ public class ActivityMapper {
 		return activity;
 	}
 	
-	
+	public ActivityResponseDTO mapGroupWagesToActivityResponseDTO(GroupWagesActivityDao groupWage, List<WagesActivityDao> wageActivities) {
+		ActivityResponseDTO activity = new ActivityResponseDTO();
+		if (groupWage.getChanged() != null && groupWage.getChanged() > 0) {
+			activity.setChangeHistory(true);
+		} else {
+			activity.setChangeHistory(false);
+		}
+		activity.setStatus(getStatus(Long.valueOf(groupWage.getStatus())));
+		activity.setTimeCreated(groupWage.getTimeCreated());
+		activity.setId(getWagesActivityKey(groupWage.getTimeCreated().getTime(), groupWage.getCentreId(), Long.valueOf(0)));
+		activity.setType(ActivityType.DUE);
+		
+		DueDetails dueDetails = new DueDetails();
+		dueDetails.setAmount(groupWage.getTotalAmount());
+		dueDetails.setDistributionType(DueDistributionType.GROUP);
+		dueDetails.setDuePerItem(groupWage.getDuePerItem());
+		dueDetails.setId(String.valueOf(groupWage.getId()));
+		dueDetails.setQuantity(groupWage.getItemQuantity());
+		
+		ItemDetails item = new ItemDetails();
+		item.setName(groupWage.getItemName());
+		item.setId(groupWage.getItemId());
+		dueDetails.setItem(item);
+		
+		List<EmployeeShare> distribution = new ArrayList<>();
+		for (WagesActivityDao wageActivity : wageActivities) {
+			EmployeeResponseDTO employee = new EmployeeResponseDTO();
+			employee.setId(wageActivity.getId());
+			employee.setCentre(wageActivity.getCentreId());
+			
+			EmployeeShare employeeShare = new EmployeeShare();
+			employeeShare.setAmount(wageActivity.getTotalAmount());
+			employeeShare.setEmployee(employee);
+			employeeShare.setId(wageActivity.getWagesActivityKey());
+			
+			distribution.add(employeeShare);
+		}
+		dueDetails.setDistribution(distribution);
+		
+		activity.setDueDetails(dueDetails);
+
+		return activity;
+	}
 
 	private ActivityType getType(Long type) {
 		if (type != null && type == ACTIVITY_TYPE_DUE) {

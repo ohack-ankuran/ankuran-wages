@@ -1,7 +1,10 @@
 package com.ankuran.wages.repository;
 
-import com.ankuran.wages.model.GroupWagesActivityDao;
+import java.util.Date;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.ankuran.wages.model.GroupWagesActivityDao;
 
 /**
  * @author Sushil Mittal.
@@ -9,4 +12,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface GroupWagesActivityRepository extends JpaRepository<GroupWagesActivityDao, Long> {
     public GroupWagesActivityDao findByActorEmployeeIdAndCentreId(Long employeeId, Long centerId);
+    public GroupWagesActivityDao findByCentreIdAndTimeCreatedBetween(Long centreId, Date lowerTimeCreated, Date upperTimeCreated);
 }
