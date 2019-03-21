@@ -28,5 +28,4 @@ public interface ActivitiesResource {
 	
 	@GetMapping(path="/activities/{activityId}")
 	public ResponseEntity<ActivityResponseDTO> getGroupActivity(@PathVariable("centreId") Long centreId, @PathVariable("employeeId") Long employeeId, @PathVariable("activityId") BigInteger activityId);
-	
 }

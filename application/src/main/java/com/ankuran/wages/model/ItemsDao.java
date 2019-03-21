@@ -38,7 +38,7 @@ public class ItemsDao {
     private Date timeUpdated;
 
     @Column(name = "actor_employee_id")
-    private Integer actorEmployeeId;
+    private Long actorEmployeeId;
     
     @Column(name = "status")
     private Long status;
@@ -91,11 +91,11 @@ public class ItemsDao {
 		this.timeUpdated = timeUpdated;
 	}
 
-	public Integer getActorEmployeeId() {
+	public Long getActorEmployeeId() {
 		return actorEmployeeId;
 	}
 
-	public void setActorEmployeeId(Integer actorEmployeeId) {
+	public void setActorEmployeeId(Long actorEmployeeId) {
 		this.actorEmployeeId = actorEmployeeId;
 	}
 
