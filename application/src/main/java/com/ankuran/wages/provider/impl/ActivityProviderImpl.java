@@ -1,10 +1,8 @@
 package com.ankuran.wages.provider.impl;
 
-import java.util.Collection;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -84,11 +82,14 @@ public class ActivityProviderImpl implements ActivityProvider {
 
 	@Override
 	public List<ActivityResponseDTO> getActivities(Long centreId, Long employeeId, Date lowerTimeCreated, Date upperTimeCreated, List<ActivityType> types) {
+		List<ActivityResponseDTO> activities = new ArrayList<>();
 		List<Long> activityTypes = types.stream().map(type -> activityMapper.getValue(type).longValue()).filter(value -> value != null).collect(Collectors.toList());
 		List<WagesActivityDao> wagesActivities = wagesActivityRepository.findByCentreIdAndEmployeeIdAndTimeCreatedBetweenAndTypeIn(centreId, employeeId, lowerTimeCreated, upperTimeCreated, activityTypes);
+		
 		if(CollectionUtils.isNotEmpty(wagesActivities)) {
-			return wagesActivities.stream().map(w -> activityMapper.mapIndividualWagesDaoToActivityResponseDTO(w)).collect(Collectors.toList());
-		} else 
-			return Collections.emptyList();
+			activities = wagesActivities.stream().map(w -> activityMapper.mapIndividualWagesDaoToActivityResponseDTO(w)).collect(Collectors.toList());
+		}
+		
+		return activities;
 	}
 }
