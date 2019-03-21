@@ -95,4 +95,17 @@ public class ActivitiesResourceImpl implements ActivitiesResource {
 		return new ResponseEntity<ActivityStoreResponseDTO>(HttpStatus.BAD_REQUEST);
 	}
 
+	@Override
+	public ResponseEntity<ActivityResponseDTO> getIndividualActivity(Long centreId, Long employeeId,
+			BigInteger activityId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ResponseEntity<ActivityResponseDTO> getGroupActivity(Long centreId, Long employeeId, BigInteger activityId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
