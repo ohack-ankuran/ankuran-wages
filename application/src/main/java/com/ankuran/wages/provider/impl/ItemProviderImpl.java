@@ -5,7 +5,8 @@ import org.springframework.stereotype.Component;
 
 import com.ankuran.wages.mapper.ItemMapper;
 import com.ankuran.wages.provider.ItemProvider;
-import com.ankuran.wages.repository.ItemRepository;
+import com.ankuran.wages.repository.ItemLabelsRepository;
+import com.ankuran.wages.repository.ItemsRepository;
 
 @Component
 public class ItemProviderImpl implements ItemProvider{
@@ -14,6 +15,9 @@ public class ItemProviderImpl implements ItemProvider{
 	ItemMapper itemMapper;
 	
 	@Autowired
-	ItemRepository itemRepository;
+	ItemsRepository itemRepository;
+	
+	@Autowired
+	ItemLabelsRepository itemLabelsRepository;
 	
 }
