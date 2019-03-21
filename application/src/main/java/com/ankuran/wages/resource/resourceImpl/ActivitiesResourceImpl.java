@@ -51,6 +51,8 @@ public class ActivitiesResourceImpl implements ActivitiesResource {
 	
 //	@Autowired
 //	private EmployeeResourceCache employeeResourceCache;
+	
+	public static final int DEFAULT_TIME_RANGE_IN_DAYS = -30;
 
 	@Override
 	public ResponseEntity<ActivityStoreResponseDTO> addIndividualActivity(Long centreId, Long employeeId, ActivityResponseDTO activity) {
@@ -147,7 +149,7 @@ public class ActivitiesResourceImpl implements ActivitiesResource {
 	private Pair<Date, Date> getTimeRange(Date lowerTimeCreated, Date upperTimeCreated) {
 		if(lowerTimeCreated == null && upperTimeCreated == null) {
 			Date upper = Date.from(Instant.now());
-			Date lower = datefrom(upper, -10);
+			Date lower = datefrom(upper, DEFAULT_TIME_RANGE_IN_DAYS);
 			return Pair.of(lower, upper);
 		} else if(lowerTimeCreated == null) {
 			Date lower = datefrom(upperTimeCreated, -10);
