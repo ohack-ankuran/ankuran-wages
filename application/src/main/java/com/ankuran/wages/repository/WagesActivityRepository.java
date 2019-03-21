@@ -1,6 +1,7 @@
 package com.ankuran.wages.repository;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -12,4 +13,6 @@ import com.ankuran.wages.model.WagesActivityDao;
  */
 public interface WagesActivityRepository extends JpaRepository<WagesActivityDao, Long> {
 	public WagesActivityDao findByCentreIdAndEmployeeIdAndTimeCreatedBetween(Long centreId, Long employeeId, Date lowerTimeCreated, Date upperTimeCreated);
+	
+	public List<WagesActivityDao> findByCentreIdAndEmployeeIdAndTimeCreatedBetweenAndTypeIn(Long centreId, Long employeeId, Date lowerTimeCreated, Date upperTimeCreated, List<Long> types);
 }

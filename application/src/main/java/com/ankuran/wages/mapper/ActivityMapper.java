@@ -231,6 +231,16 @@ public class ActivityMapper {
 			return null;
 		}
 	}
+	
+	public Integer getValue(ActivityType type) {
+		if (type != null && type == ActivityType.DUE) {
+			return ACTIVITY_TYPE_DUE;
+		} else if (type != null && type == ActivityType.PAYMENT) {
+			return ACTIVITY_TYPE_PAYMENT;
+		} else {
+			return null;
+		}
+	}
 
 	private ActivityStatus getStatus(Long status) {
 		if (status != null && status == ACTIVITY_STATUS_CORRECT) {

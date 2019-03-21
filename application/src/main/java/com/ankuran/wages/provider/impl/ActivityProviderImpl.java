@@ -1,9 +1,13 @@
 package com.ankuran.wages.provider.impl;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -76,5 +80,15 @@ public class ActivityProviderImpl implements ActivityProvider {
 		GroupWagesActivityDao existingGroupWagesActivityDao = groupWagesActivityRepository.findByCentreIdAndTimeCreatedBetween(centreId, lowerTimeCreated, upperTimeCreated);
 		return existingGroupWagesActivityDao != null && groupWagesActivityDao.getTotalAmount() != null && existingGroupWagesActivityDao.getTotalAmount() != null 
 				&& existingGroupWagesActivityDao.getTotalAmount().equals(groupWagesActivityDao.getTotalAmount());
+	}
+
+	@Override
+	public List<ActivityResponseDTO> getActivities(Long centreId, Long employeeId, Date lowerTimeCreated, Date upperTimeCreated, List<ActivityType> types) {
+		List<Long> activityTypes = types.stream().map(type -> activityMapper.getValue(type).longValue()).filter(value -> value != null).collect(Collectors.toList());
+		List<WagesActivityDao> wagesActivities = wagesActivityRepository.findByCentreIdAndEmployeeIdAndTimeCreatedBetweenAndTypeIn(centreId, employeeId, lowerTimeCreated, upperTimeCreated, activityTypes);
+		if(CollectionUtils.isNotEmpty(wagesActivities)) {
+			return wagesActivities.stream().map(w -> activityMapper.mapIndividualWagesDaoToActivityResponseDTO(w)).collect(Collectors.toList());
+		} else 
+			return Collections.emptyList();
 	}
 }

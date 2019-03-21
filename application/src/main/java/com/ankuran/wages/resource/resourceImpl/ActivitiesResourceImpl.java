@@ -1,8 +1,18 @@
 package com.ankuran.wages.resource.resourceImpl;
 
 import java.math.BigInteger;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -109,5 +119,55 @@ public class ActivitiesResourceImpl implements ActivitiesResource {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public ResponseEntity<List<ActivityResponseDTO>> getActivities(Long centreId, Long employeeId, String lowerTimeCreated,
+			String upperTimeCreated, List<String> types) throws ParseException {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
+		Pair<Date, Date> timeRange = getTimeRange(sdf.parse(lowerTimeCreated), sdf.parse(upperTimeCreated));
+		List<ActivityType> activityTypes = getActivityTypes(types);
+		List<ActivityResponseDTO> activities = activityProvider.getActivities(centreId, employeeId, timeRange.getLeft(), timeRange.getRight(), activityTypes);
+		
+		return new ResponseEntity<List<ActivityResponseDTO>>(activities, HttpStatus.OK);
+	}
+
+	private Pair<Date, Date> getTimeRange(Date lowerTimeCreated, Date upperTimeCreated) {
+		if(lowerTimeCreated == null && upperTimeCreated == null) {
+			Date upper = Date.from(Instant.now());
+			Date lower = datefrom(upper, -10);
+			return Pair.of(lower, upper);
+		} else if(lowerTimeCreated == null) {
+			Date lower = datefrom(upperTimeCreated, -10);
+			return Pair.of(lower, upperTimeCreated);
+		} else if(upperTimeCreated == null) {
+			Date upper = Date.from(Instant.now());
+			return Pair.of(lowerTimeCreated, upper);
+		} else {
+			return Pair.of(lowerTimeCreated, upperTimeCreated);
+		}
+	}
+	
+	
+
+	private Date datefrom(Date upper, int days) {
+        Date myDate = Date.from(Instant.now());
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(myDate);
+        cal.add(Calendar.DATE, days);
+        return cal.getTime();
+	}
+
+	private List<ActivityType> getActivityTypes(List<String> types) {
+		List<ActivityType> activityTypes = new ArrayList<ActivityType>();
+		if(CollectionUtils.isNotEmpty(types)) {
+			activityTypes.addAll(types.stream().map(t -> ActivityType.valueOf(t)).collect(Collectors.toList()));
+		} else {
+			activityTypes.addAll(Arrays.asList(ActivityType.values()));
+		}
+		return activityTypes;
+	}
+
+	
 
 }
