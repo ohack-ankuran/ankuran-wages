@@ -15,4 +15,6 @@ public interface WagesActivityRepository extends JpaRepository<WagesActivityDao,
 	public WagesActivityDao findByCentreIdAndEmployeeIdAndTimeCreatedBetween(Long centreId, Long employeeId, Date lowerTimeCreated, Date upperTimeCreated);
 	
 	public List<WagesActivityDao> findByCentreIdAndEmployeeIdAndTimeCreatedBetweenAndTypeIn(Long centreId, Long employeeId, Date lowerTimeCreated, Date upperTimeCreated, List<Long> types);
+	
+	public List<WagesActivityDao> findByCentreIdAndTimeCreatedBetweenAndTypeIn(Long centreId, Date lowerTimeCreated, Date upperTimeCreated, List<Long> types);
 }
