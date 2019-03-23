@@ -92,4 +92,19 @@ public class ActivityProviderImpl implements ActivityProvider {
 		
 		return activities;
 	}
+
+	@Override
+	public List<ActivityResponseDTO> getPaymentActivities(Long centreId, Date lowerTimeCreated, Date upperTimeCreated) {
+		List<ActivityType> types = new ArrayList<>();
+		types.add(ActivityType.PAYMENT);
+		List<ActivityResponseDTO> activities = new ArrayList<>();
+		List<Long> activityTypes = types.stream().map(type -> activityMapper.getValue(type).longValue()).filter(value -> value != null).collect(Collectors.toList());
+		List<WagesActivityDao> wagesActivities = wagesActivityRepository.findByCentreIdAndTimeCreatedBetweenAndTypeIn(centreId, lowerTimeCreated, upperTimeCreated, activityTypes);
+		
+		if(CollectionUtils.isNotEmpty(wagesActivities)) {
+			activities = wagesActivities.stream().map(w -> activityMapper.mapIndividualWagesDaoToActivityResponseDTO(w)).collect(Collectors.toList());
+		}
+		
+		return activities;
+	}
 }

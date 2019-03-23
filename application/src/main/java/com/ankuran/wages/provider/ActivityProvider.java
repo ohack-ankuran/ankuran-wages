@@ -12,4 +12,6 @@ public interface ActivityProvider {
 	
 	List<ActivityResponseDTO> getActivities(Long centreId, Long employeeId, Date lowerTimeCreated, Date upperTimeCreated, List<EmployeeActivityEnum.ActivityType> types);
 	
+	List<ActivityResponseDTO> getPaymentActivities(Long centreId, Date lowerTimeCreated, Date upperTimeCreated);
+	
 }

@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 
 import com.ankuran.wages.enums.EmployeeActivityEnum.ActivityType;
 import com.ankuran.wages.enums.EmployeeActivityEnum.DueDistributionType;
+import com.ankuran.wages.model.response.Activities;
 import com.ankuran.wages.model.response.ActivityResponseDTO;
 import com.ankuran.wages.model.response.ActivityStoreResponseDTO;
 import com.ankuran.wages.model.response.EmployeeResponseDTO;
@@ -32,7 +33,6 @@ import com.ankuran.wages.provider.EmployeeProvider;
 import com.ankuran.wages.provider.ItemProvider;
 import com.ankuran.wages.provider.OutstandingAmountProvider;
 import com.ankuran.wages.resource.ActivitiesResource;
-import com.ankuran.wages.resource.cache.EmployeeResourceCache;
 
 @Component
 public class ActivitiesResourceImpl implements ActivitiesResource {
@@ -112,7 +112,7 @@ public class ActivitiesResourceImpl implements ActivitiesResource {
 
 
 	@Override
-	public ResponseEntity<List<ActivityResponseDTO>> getActivities(Long centreId, Long employeeId, String lowerTimeCreated,
+	public ResponseEntity<Activities> getActivities(Long centreId, Long employeeId, String lowerTimeCreated,
 			String upperTimeCreated, List<String> types) throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Pair<Date, Date> timeRange = getTimeRange(sdf.parse(lowerTimeCreated), sdf.parse(upperTimeCreated));
@@ -120,7 +120,20 @@ public class ActivitiesResourceImpl implements ActivitiesResource {
 		List<ActivityResponseDTO> activities = activityProvider.getActivities(centreId, employeeId, timeRange.getLeft(), timeRange.getRight(), activityTypes); 
 		activities.forEach(act -> populateItemDetails(act));
 		activities.forEach(act -> populateRecipientDetails(centreId, employeeId, act));
-		return new ResponseEntity<List<ActivityResponseDTO>>(activities, HttpStatus.OK);
+		Activities activitiesResponse = new Activities();
+		activitiesResponse.setActivities(activities);
+		return new ResponseEntity<Activities>(activitiesResponse, HttpStatus.OK);
+	}
+	
+	@Override
+	public ResponseEntity<Activities> getPaymentActivities(Long centreId, String lowerTimeCreated, String upperTimeCreated) throws ParseException {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Pair<Date, Date> timeRange = getTimeRange(sdf.parse(lowerTimeCreated), sdf.parse(upperTimeCreated));
+		List<ActivityResponseDTO> activities = activityProvider.getPaymentActivities(centreId, timeRange.getLeft(), timeRange.getRight()); 
+		activities.forEach(act -> populateRecipientDetails(centreId, act.getPaymentDetails().getRecipient().getId(), act));
+		Activities activitiesResponse = new Activities();
+		activitiesResponse.setActivities(activities);
+		return new ResponseEntity<Activities>(activitiesResponse, HttpStatus.OK);
 	}
 
 	private ActivityResponseDTO populateItemDetails(ActivityResponseDTO activity) {
@@ -194,7 +207,5 @@ public class ActivitiesResourceImpl implements ActivitiesResource {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	
 
 }
