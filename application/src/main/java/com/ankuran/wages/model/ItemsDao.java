@@ -43,6 +43,9 @@ public class ItemsDao {
     @Column(name = "status")
     private Long status;
     
+    @Column(name="available_units")
+    private Long availableUnits;
+    
     public Long getId() {
         return id;
     }
@@ -105,5 +108,13 @@ public class ItemsDao {
 
 	public void setStatus(Long status) {
 		this.status = status;
+	}
+
+	public Long getAvailableUnits() {
+		return availableUnits;
+	}
+
+	public void setAvailableUnits(Long availableUnits) {
+		this.availableUnits = availableUnits;
 	}
 }

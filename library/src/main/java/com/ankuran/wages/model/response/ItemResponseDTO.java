@@ -7,12 +7,14 @@ public class ItemResponseDTO {
 
 	private Long id;
 	private String name;
-	private String type;
+	private String category;
 	private String picture;
 	private List<String> labels;
 	private Date timeCreated;
 	private EmployeeResponseDTO addedBy;
 	private Boolean active;
+	private Long availableUnits;
+	
 	public Long getId() {
 		return id;
 	}
@@ -25,11 +27,11 @@ public class ItemResponseDTO {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getType() {
-		return type;
+	public String getCategory() {
+		return category;
 	}
-	public void setType(String type) {
-		this.type = type;
+	public void setCategory(String category) {
+		this.category = category;
 	}
 	public String getPicture() {
 		return picture;
@@ -60,5 +62,11 @@ public class ItemResponseDTO {
 	}
 	public void setActive(Boolean active) {
 		this.active = active;
+	}
+	public Long getAvailableUnits() {
+		return availableUnits;
+	}
+	public void setAvailableUnits(Long availableUnits) {
+		this.availableUnits = availableUnits;
 	}
 }
