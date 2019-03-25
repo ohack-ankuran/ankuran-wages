@@ -12,5 +12,5 @@ import com.ankuran.wages.model.ItemFactDao;
 public interface ItemFactRepository extends JpaRepository<ItemFactDao, Long> {
 
 	public List<ItemFactDao> findAllByCentreIdAndItemIdAndTimeCreatedBetweenAndTypeAndReason(Long centreId, Long itemId, Date lowerTimeCreated,Date upperTimeCreated, Long type, Long reason);
-	public List<ItemFactDao> findAllByItemIdOrderByTimeCreatedDesc(Long itemId);
+	public List<ItemFactDao> findAllByItemIdAndTimeCreatedBetweenAndOrderByTimeCreatedDesc(Long itemId, Date lowerTimeCreated, Date upperTimeCreated);
 }

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import com.ankuran.wages.enums.ItemHistoryEnum.HistoryType;
 import com.ankuran.wages.mapper.ItemMapper;
 import com.ankuran.wages.model.ItemFactDao;
 import com.ankuran.wages.model.ItemLabelsDao;
@@ -125,6 +126,20 @@ public class ItemProviderImpl implements ItemProvider{
 			if (!hasExistingItem(itemFact)) {
 				itemFactRepository.save(itemFact);
 				storedId = itemFact.getId();
+				
+				Optional<ItemsDao> itemDaoOpt = itemRepository.findById(itemHistory.getItemId());
+				if (itemDaoOpt.isPresent()) {
+					ItemsDao itemDao = itemDaoOpt.get();
+					Long currentUnits = itemDao.getAvailableUnits();
+					if (HistoryType.ADD.equals(itemHistory.getType())) {
+						Long availableUnits = currentUnits + itemHistory.getUnits();
+						itemDao.setAvailableUnits(availableUnits);
+					} else if (HistoryType.REMOVE.equals(itemHistory.getType())) {
+						Long availableUnits = currentUnits - itemHistory.getUnits();
+						itemDao.setAvailableUnits(availableUnits);
+					}
+					itemRepository.save(itemDao);
+				}
 			} else {
 				itemFact.setId(storedId);
 			}
@@ -156,9 +171,9 @@ public class ItemProviderImpl implements ItemProvider{
 
 
 	@Override
-	public List<ItemHistoryDTO> getItemHistory(Long itemId) {
+	public List<ItemHistoryDTO> getItemHistory(Long itemId, Date lowerTimeCreated, Date upperTimeCreated) {
 		List<ItemHistoryDTO> history = new ArrayList<>();
-		List<ItemFactDao> itemFacts = itemFactRepository.findAllByItemIdOrderByTimeCreatedDesc(itemId);
+		List<ItemFactDao> itemFacts = itemFactRepository.findAllByItemIdAndTimeCreatedBetweenAndOrderByTimeCreatedDesc(itemId, lowerTimeCreated, upperTimeCreated);
 		if (CollectionUtils.isNotEmpty(itemFacts)) {
 			history = itemFacts.stream().map(itemFact -> itemMapper.mapItemFactDaoToDto(itemFact)).collect(Collectors.toList());
 		}

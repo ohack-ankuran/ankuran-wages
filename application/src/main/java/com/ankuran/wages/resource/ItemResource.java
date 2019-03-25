@@ -1,5 +1,6 @@
 package com.ankuran.wages.resource;
 
+import java.text.ParseException;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ public interface ItemResource {
 	public ResponseEntity<ItemStoreResponseDTO> addProduct(@RequestBody ItemResponseDTO itemResponseDTO);
 	
 	@GetMapping(path="/products/{productId}")
-	public ResponseEntity<ItemResponseDTO> getProduct(@PathVariable Long productId);
+	public ResponseEntity<ItemResponseDTO> getProduct(@PathVariable("productId") Long productId);
 	
 	@GetMapping(path="/products")
 	public ResponseEntity<ItemsResponseDTO> getProducts(@RequestParam(value="category", required=false) String category,
@@ -35,5 +36,7 @@ public interface ItemResource {
 	public ResponseEntity<ItemUpdateResponseDTO> addItemHistory(@PathVariable("productId") Long productId, @RequestBody ItemHistoryDTO itemHistoryDTO);
 	
 	@GetMapping(path="/products/{productId}/history")
-	public ResponseEntity<ItemUpdateResponseDTO> getItemHistory(@PathVariable("productId") Long productId);
+	public ResponseEntity<ItemUpdateResponseDTO> getItemHistory(@PathVariable("productId") Long productId,
+			@RequestParam(value="lowerTimeCreated", required=false) String lowerTimeCreated,
+			@RequestParam(value="upperTimeCreated", required=false) String upperTimeCreated) throws ParseException;
 }

@@ -1,14 +1,19 @@
 package com.ankuran.wages.resource.resourceImpl;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+import com.ankuran.wages.HelperUtil;
 import com.ankuran.wages.model.response.ItemHistoryDTO;
 import com.ankuran.wages.model.response.ItemResponseDTO;
 import com.ankuran.wages.model.response.ItemStoreResponseDTO;
@@ -59,8 +64,11 @@ public class ItemResourceImpl implements ItemResource {
 	}
 
 	@Override
-	public ResponseEntity<ItemUpdateResponseDTO> getItemHistory(Long productId) {
-		List<ItemHistoryDTO> itemUpdates = itemProvider.getItemHistory(productId);
+	public ResponseEntity<ItemUpdateResponseDTO> getItemHistory(Long productId, String lowerTimeCreated,
+			String upperTimeCreated) throws ParseException {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Pair<Date, Date> timeRange = HelperUtil.getTimeRange(sdf.parse(lowerTimeCreated), sdf.parse(upperTimeCreated));
+		List<ItemHistoryDTO> itemUpdates = itemProvider.getItemHistory(productId, timeRange.getLeft(), timeRange.getRight());
 		return new ResponseEntity<ItemUpdateResponseDTO>(new ItemUpdateResponseDTO(itemUpdates), HttpStatus.OK);
 	}
 	

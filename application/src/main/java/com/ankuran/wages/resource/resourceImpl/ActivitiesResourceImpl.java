@@ -3,10 +3,8 @@ package com.ankuran.wages.resource.resourceImpl;
 import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+import com.ankuran.wages.HelperUtil;
 import com.ankuran.wages.enums.EmployeeActivityEnum.ActivityType;
 import com.ankuran.wages.enums.EmployeeActivityEnum.DueDistributionType;
 import com.ankuran.wages.model.response.Activities;
@@ -49,10 +48,6 @@ public class ActivitiesResourceImpl implements ActivitiesResource {
 	@Autowired
 	private EmployeeProvider employeeProvider;
 	
-//	@Autowired
-//	private EmployeeResourceCache employeeResourceCache;
-	
-	public static final int DEFAULT_TIME_RANGE_IN_DAYS = -30;
 
 	@Override
 	public ResponseEntity<ActivityStoreResponseDTO> addIndividualActivity(Long centreId, Long employeeId, ActivityResponseDTO activity) {
@@ -115,7 +110,7 @@ public class ActivitiesResourceImpl implements ActivitiesResource {
 	public ResponseEntity<Activities> getActivities(Long centreId, Long employeeId, String lowerTimeCreated,
 			String upperTimeCreated, List<String> types) throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		Pair<Date, Date> timeRange = getTimeRange(sdf.parse(lowerTimeCreated), sdf.parse(upperTimeCreated));
+		Pair<Date, Date> timeRange = HelperUtil.getTimeRange(sdf.parse(lowerTimeCreated), sdf.parse(upperTimeCreated));
 		List<ActivityType> activityTypes = getActivityTypes(types);
 		List<ActivityResponseDTO> activities = activityProvider.getActivities(centreId, employeeId, timeRange.getLeft(), timeRange.getRight(), activityTypes); 
 		activities.forEach(act -> populateItemDetails(act));
@@ -128,7 +123,7 @@ public class ActivitiesResourceImpl implements ActivitiesResource {
 	@Override
 	public ResponseEntity<Activities> getPaymentActivities(Long centreId, String lowerTimeCreated, String upperTimeCreated) throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		Pair<Date, Date> timeRange = getTimeRange(sdf.parse(lowerTimeCreated), sdf.parse(upperTimeCreated));
+		Pair<Date, Date> timeRange = HelperUtil.getTimeRange(sdf.parse(lowerTimeCreated), sdf.parse(upperTimeCreated));
 		List<ActivityResponseDTO> activities = activityProvider.getPaymentActivities(centreId, timeRange.getLeft(), timeRange.getRight()); 
 		activities.forEach(act -> populateRecipientDetails(centreId, act.getPaymentDetails().getRecipient().getId(), act));
 		Activities activitiesResponse = new Activities();
@@ -157,32 +152,6 @@ public class ActivitiesResourceImpl implements ActivitiesResource {
 		} else if (ActivityType.DUE.equals(activity.getType())) {
 			activity.getDueDetails().setRecipient(employee);
 		}
-	}
-
-	private Pair<Date, Date> getTimeRange(Date lowerTimeCreated, Date upperTimeCreated) {
-		if(lowerTimeCreated == null && upperTimeCreated == null) {
-			Date upper = Date.from(Instant.now());
-			Date lower = datefrom(upper, DEFAULT_TIME_RANGE_IN_DAYS);
-			return Pair.of(lower, upper);
-		} else if(lowerTimeCreated == null) {
-			Date lower = datefrom(upperTimeCreated, DEFAULT_TIME_RANGE_IN_DAYS);
-			return Pair.of(lower, upperTimeCreated);
-		} else if(upperTimeCreated == null) {
-			Date upper = Date.from(Instant.now());
-			return Pair.of(lowerTimeCreated, upper);
-		} else {
-			return Pair.of(lowerTimeCreated, upperTimeCreated);
-		}
-	}
-	
-	
-
-	private Date datefrom(Date upper, int days) {
-        Date myDate = Date.from(Instant.now());
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(myDate);
-        cal.add(Calendar.DATE, days);
-        return cal.getTime();
 	}
 
 	private List<ActivityType> getActivityTypes(List<String> types) {
