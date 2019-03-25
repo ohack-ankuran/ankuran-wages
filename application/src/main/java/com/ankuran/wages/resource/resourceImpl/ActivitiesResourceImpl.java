@@ -131,7 +131,7 @@ public class ActivitiesResourceImpl implements ActivitiesResource {
 	private ActivityResponseDTO populateItemDetails(ActivityResponseDTO activity) {
 		ActivityResponseDTO prettyActivity = activity;
 		if(activity != null && activity.getDueDetails() != null && activity.getDueDetails().getItem() != null && 
-				(activity.getDueDetails().getItem().getId() != null || activity.getDueDetails().getItem().getId() != 0L)) {
+				(activity.getDueDetails().getItem().getId() != null && activity.getDueDetails().getItem().getId() > 0)) {
 			Long itemId = activity.getDueDetails().getItem().getId();
 			Optional<ItemResponseDTO> itemResponseDTO = Optional.ofNullable(itemProvider.getProductById(itemId));
 			itemResponseDTO.ifPresent(item -> prettyActivity.getDueDetails().setItem(item));

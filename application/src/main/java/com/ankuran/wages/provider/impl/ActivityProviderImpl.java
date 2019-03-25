@@ -92,7 +92,7 @@ public class ActivityProviderImpl implements ActivityProvider {
 	public List<ActivityResponseDTO> getActivities(Long centreId, Long employeeId, Date lowerTimeCreated, Date upperTimeCreated, List<ActivityType> types) {
 		List<ActivityResponseDTO> activities = new ArrayList<>();
 		List<Long> activityTypes = types.stream().map(type -> activityMapper.getValue(type).longValue()).filter(value -> value != null).collect(Collectors.toList());
-		List<WagesActivityDao> wagesActivities = wagesActivityRepository.findByCentreIdAndEmployeeIdAndTimeCreatedBetweenAndTypeIn(centreId, employeeId, lowerTimeCreated, upperTimeCreated, activityTypes);
+		List<WagesActivityDao> wagesActivities = wagesActivityRepository.findByCentreIdAndEmployeeIdAndTimeCreatedBetweenAndTypeInOrderByTimeCreatedDesc(centreId, employeeId, lowerTimeCreated, upperTimeCreated, activityTypes);
 		
 		if(CollectionUtils.isNotEmpty(wagesActivities)) {
 			activities = wagesActivities.stream().map(w -> activityMapper.mapIndividualWagesDaoToActivityResponseDTO(w)).collect(Collectors.toList());
@@ -107,7 +107,7 @@ public class ActivityProviderImpl implements ActivityProvider {
 		types.add(ActivityType.PAYMENT);
 		List<ActivityResponseDTO> activities = new ArrayList<>();
 		List<Long> activityTypes = types.stream().map(type -> activityMapper.getValue(type).longValue()).filter(value -> value != null).collect(Collectors.toList());
-		List<WagesActivityDao> wagesActivities = wagesActivityRepository.findByCentreIdAndTimeCreatedBetweenAndTypeIn(centreId, lowerTimeCreated, upperTimeCreated, activityTypes);
+		List<WagesActivityDao> wagesActivities = wagesActivityRepository.findByCentreIdAndTimeCreatedBetweenAndTypeInOrderByTimeCreatedDesc(centreId, lowerTimeCreated, upperTimeCreated, activityTypes);
 		
 		if(CollectionUtils.isNotEmpty(wagesActivities)) {
 			activities = wagesActivities.stream().map(w -> activityMapper.mapIndividualWagesDaoToActivityResponseDTO(w)).collect(Collectors.toList());
