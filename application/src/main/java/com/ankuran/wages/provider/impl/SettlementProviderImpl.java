@@ -43,7 +43,7 @@ public class SettlementProviderImpl implements SettlementProvider {
 	private boolean hasExistingSettlement(SettlementDao settlement) {
 		Date lowerTimeCreated = new Date(settlement.getTimeCreated().getTime() - 1000);
 		Date upperTimeCreated = new Date(settlement.getTimeCreated().getTime() + 1000);
-		List<SettlementDao> existingSettlements = settlementRepository.findAllByCentreIdAndTimeCreatedBetweenAndOrderByTimeCreatedDesc(settlement.getCentreId(), lowerTimeCreated, upperTimeCreated);
+		List<SettlementDao> existingSettlements = settlementRepository.findAllByCentreIdAndTimeCreatedBetweenOrderByTimeCreatedDesc(settlement.getCentreId(), lowerTimeCreated, upperTimeCreated);
 		for (SettlementDao existingSettlement : existingSettlements) {
 			if (existingSettlement.getAmount() != null && settlement.getAmount() != null && existingSettlement.getAmount().equals(settlement.getAmount())
 					&& existingSettlement.getAmountBefore() != null && settlement.getAmountBefore() != null && existingSettlement.getAmountBefore().equals(settlement.getAmountBefore())
@@ -56,7 +56,7 @@ public class SettlementProviderImpl implements SettlementProvider {
 	@Override
 	public List<SettlementDTO> getSettlements(Long centreId, Date lowerTimeCreated, Date upperTimeCreated) {
 		List<SettlementDTO> settlements = new ArrayList<SettlementDTO>();
-		List<SettlementDao> settlementDaos = settlementRepository.findAllByCentreIdAndTimeCreatedBetweenAndOrderByTimeCreatedDesc(centreId, lowerTimeCreated, upperTimeCreated);
+		List<SettlementDao> settlementDaos = settlementRepository.findAllByCentreIdAndTimeCreatedBetweenOrderByTimeCreatedDesc(centreId, lowerTimeCreated, upperTimeCreated);
 		if (CollectionUtils.isNotEmpty(settlementDaos)) {
 			settlements = settlementDaos.stream().map(settlementDao -> settlementMapper.mapSettlementDaoToDto(settlementDao)).collect(Collectors.toList());
 		}

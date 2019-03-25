@@ -2,7 +2,6 @@ package com.ankuran.wages.resource.resourceImpl;
 
 import java.math.BigInteger;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -109,8 +108,7 @@ public class ActivitiesResourceImpl implements ActivitiesResource {
 	@Override
 	public ResponseEntity<Activities> getActivities(Long centreId, Long employeeId, String lowerTimeCreated,
 			String upperTimeCreated, List<String> types) throws ParseException {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		Pair<Date, Date> timeRange = HelperUtil.getTimeRange(sdf.parse(lowerTimeCreated), sdf.parse(upperTimeCreated));
+		Pair<Date, Date> timeRange = HelperUtil.getTimeRange(lowerTimeCreated, upperTimeCreated);
 		List<ActivityType> activityTypes = getActivityTypes(types);
 		List<ActivityResponseDTO> activities = activityProvider.getActivities(centreId, employeeId, timeRange.getLeft(), timeRange.getRight(), activityTypes); 
 		activities.forEach(act -> populateItemDetails(act));
@@ -122,8 +120,7 @@ public class ActivitiesResourceImpl implements ActivitiesResource {
 	
 	@Override
 	public ResponseEntity<Activities> getPaymentActivities(Long centreId, String lowerTimeCreated, String upperTimeCreated) throws ParseException {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		Pair<Date, Date> timeRange = HelperUtil.getTimeRange(sdf.parse(lowerTimeCreated), sdf.parse(upperTimeCreated));
+		Pair<Date, Date> timeRange = HelperUtil.getTimeRange(lowerTimeCreated, upperTimeCreated);
 		List<ActivityResponseDTO> activities = activityProvider.getPaymentActivities(centreId, timeRange.getLeft(), timeRange.getRight()); 
 		activities.forEach(act -> populateRecipientDetails(centreId, act.getPaymentDetails().getRecipient().getId(), act));
 		Activities activitiesResponse = new Activities();

@@ -1,5 +1,7 @@
 package com.ankuran.wages;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Calendar;
 import java.util.Date;
@@ -10,19 +12,22 @@ public class HelperUtil {
 	
 	public static final int DEFAULT_TIME_RANGE_IN_DAYS = -30;
 
-	public static Pair<Date, Date> getTimeRange(Date lowerTimeCreated, Date upperTimeCreated) {
+	public static Pair<Date, Date> getTimeRange(String lowerTimeCreated, String upperTimeCreated) throws ParseException {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		if(lowerTimeCreated == null && upperTimeCreated == null) {
 			Date upper = Date.from(Instant.now());
 			Date lower = datefrom(upper, DEFAULT_TIME_RANGE_IN_DAYS);
 			return Pair.of(lower, upper);
 		} else if(lowerTimeCreated == null) {
-			Date lower = datefrom(upperTimeCreated, DEFAULT_TIME_RANGE_IN_DAYS);
-			return Pair.of(lower, upperTimeCreated);
+			Date upper = sdf.parse(upperTimeCreated);
+			Date lower = datefrom(upper, DEFAULT_TIME_RANGE_IN_DAYS);
+			return Pair.of(lower, upper);
 		} else if(upperTimeCreated == null) {
+			Date lower = sdf.parse(lowerTimeCreated);
 			Date upper = Date.from(Instant.now());
-			return Pair.of(lowerTimeCreated, upper);
+			return Pair.of(lower, upper);
 		} else {
-			return Pair.of(lowerTimeCreated, upperTimeCreated);
+			return Pair.of(sdf.parse(lowerTimeCreated), sdf.parse(upperTimeCreated));
 		}
 	}
 	

@@ -1,12 +1,13 @@
 package com.ankuran.wages.resource.resourceImpl;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -47,7 +48,7 @@ public class ItemResourceImpl implements ItemResource {
 
 	@Override
 	public ResponseEntity<ItemsResponseDTO> getProducts(String category, List<String> labels) {
-		List<ItemResponseDTO> items = itemProvider.getProducts(category, labels);
+		List<ItemResponseDTO> items = itemProvider.getProducts(category, labels.stream().filter(x->!StringUtils.isBlank(x)).collect(Collectors.toList()));
 		return new ResponseEntity<ItemsResponseDTO>(new ItemsResponseDTO(items), HttpStatus.OK);
 	}
 
@@ -66,8 +67,7 @@ public class ItemResourceImpl implements ItemResource {
 	@Override
 	public ResponseEntity<ItemUpdateResponseDTO> getItemHistory(Long productId, String lowerTimeCreated,
 			String upperTimeCreated) throws ParseException {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		Pair<Date, Date> timeRange = HelperUtil.getTimeRange(sdf.parse(lowerTimeCreated), sdf.parse(upperTimeCreated));
+		Pair<Date, Date> timeRange = HelperUtil.getTimeRange(lowerTimeCreated, upperTimeCreated);
 		List<ItemHistoryDTO> itemUpdates = itemProvider.getItemHistory(productId, timeRange.getLeft(), timeRange.getRight());
 		return new ResponseEntity<ItemUpdateResponseDTO>(new ItemUpdateResponseDTO(itemUpdates), HttpStatus.OK);
 	}

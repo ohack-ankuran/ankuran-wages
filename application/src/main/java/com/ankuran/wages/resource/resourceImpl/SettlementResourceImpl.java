@@ -1,7 +1,6 @@
 package com.ankuran.wages.resource.resourceImpl;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -40,8 +39,7 @@ public class SettlementResourceImpl implements SettlementResource {
 	@Override
 	public ResponseEntity<SettlementsDTO> getSettlements(Long centreId, String lowerTimeCreated,
 			String upperTimeCreated) throws ParseException {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		Pair<Date, Date> timeRange = HelperUtil.getTimeRange(sdf.parse(lowerTimeCreated), sdf.parse(upperTimeCreated));
+		Pair<Date, Date> timeRange = HelperUtil.getTimeRange(lowerTimeCreated, upperTimeCreated);
 		List<SettlementDTO> settlements = settlementProvider.getSettlements(centreId, timeRange.getLeft(), timeRange.getRight());
 		return new ResponseEntity<SettlementsDTO>(new SettlementsDTO(settlements), HttpStatus.OK);
 	}

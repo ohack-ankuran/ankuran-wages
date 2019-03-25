@@ -100,11 +100,16 @@ public class ItemProviderImpl implements ItemProvider{
 
 	@Override
 	public List<ItemResponseDTO> getProducts(String category, List<String> labels) {
-		List<ItemsDao> itemDaosWithCategory = itemRepository.findAllByCategory(category);
+		List<ItemsDao> itemDaos = new ArrayList<>();
+		if (!StringUtils.isEmpty(category)) {
+			itemDaos = itemRepository.findAllByCategory(category);
+		} else {
+			itemDaos = itemRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
+		}
 		List<ItemResponseDTO> items = new ArrayList<>(); 
-		for (ItemsDao itemWithCategory : itemDaosWithCategory) {
-			List<ItemLabelsDao> itemLabels = itemLabelsRepository.findAllByItemId(itemWithCategory.getId());
-			ItemResponseDTO item = itemMapper.mapItemsDaoTODto(itemWithCategory, itemLabels);
+		for (ItemsDao itemDao : itemDaos) {
+			List<ItemLabelsDao> itemLabels = itemLabelsRepository.findAllByItemId(itemDao.getId());
+			ItemResponseDTO item = itemMapper.mapItemsDaoTODto(itemDao, itemLabels);
 			//Add only those which contains available labels
 			if (CollectionUtils.isNotEmpty(labels)) {
 				if (CollectionUtils.isNotEmpty(item.getLabels()) && item.getLabels().containsAll(labels)) {
@@ -173,7 +178,7 @@ public class ItemProviderImpl implements ItemProvider{
 	@Override
 	public List<ItemHistoryDTO> getItemHistory(Long itemId, Date lowerTimeCreated, Date upperTimeCreated) {
 		List<ItemHistoryDTO> history = new ArrayList<>();
-		List<ItemFactDao> itemFacts = itemFactRepository.findAllByItemIdAndTimeCreatedBetweenAndOrderByTimeCreatedDesc(itemId, lowerTimeCreated, upperTimeCreated);
+		List<ItemFactDao> itemFacts = itemFactRepository.findAllByItemIdAndTimeCreatedBetweenOrderByTimeCreatedDesc(itemId, lowerTimeCreated, upperTimeCreated);
 		if (CollectionUtils.isNotEmpty(itemFacts)) {
 			history = itemFacts.stream().map(itemFact -> itemMapper.mapItemFactDaoToDto(itemFact)).collect(Collectors.toList());
 		}
