@@ -49,10 +49,12 @@ public class EmployerProviderImpl implements EmployeeProvider {
 	public Long addEmployee(EmployeeResponseDTO employeeResponseDTO) {
 		Date lowerTimeOfJoining = new Date(employeeResponseDTO.getTimeOfJoining().getTime() - 10000);
 		Date upperTimeOfJoining = new Date(employeeResponseDTO.getTimeOfJoining().getTime() + 10000);
-		EmployeeDao existingEmployeeDao = employeeRepository.findByCentreIdAndFullNameAndJoiningTimeBetween(employeeResponseDTO.getCentre(),
+		List<EmployeeDao> existingEmployeesDao = employeeRepository.findByCentreIdAndFullNameAndJoiningTimeBetween(employeeResponseDTO.getCentre(),
 				employeeResponseDTO.getFullName(), lowerTimeOfJoining, upperTimeOfJoining);
-		if (existingEmployeeDao != null && existingEmployeeDao.getId() != null && existingEmployeeDao.getId() > 0) {
-			return Long.valueOf(0);
+		for (EmployeeDao existingEmployeeDao : existingEmployeesDao) {
+			if (existingEmployeeDao != null && existingEmployeeDao.getId() != null && existingEmployeeDao.getId() > 0) {
+				return Long.valueOf(0);
+			}
 		}
 		EmployeeDao employeeDao = employeeMapper.mapEmployeeDTOToDao(employeeResponseDTO);
 		employeeRepository.save(employeeDao);
