@@ -20,5 +20,11 @@ public class CentreMapper {
 		}
 		return centreDTO;
 	}
+	
+	public CentreDao mapCentreDtoToDao(CentreResponseDTO centreResponseDTO) {
+		CentreDao centreDao = new CentreDao();
+		centreDao.setName(centreResponseDTO.getName());
+		return centreDao;
+	}
 
 }
