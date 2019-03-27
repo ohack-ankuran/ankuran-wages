@@ -67,24 +67,32 @@ public class ActivityProviderImpl implements ActivityProvider {
 			WagesActivityDao wageActivity) {
 		Date lowerTimeCreated = new Date(activity.getTimeCreated().getTime() - 1000);
 		Date upperTimeCreated = new Date(activity.getTimeCreated().getTime() + 1000);
-		WagesActivityDao existingWageActivity = wagesActivityRepository.findByCentreIdAndEmployeeIdAndTimeCreatedBetween(centreId, employeeId, lowerTimeCreated, upperTimeCreated);
-		return existingWageActivity != null && existingWageActivity.getTotalAmount() != null && wageActivity.getTotalAmount() != null
-				&& existingWageActivity.getTotalAmount().equals(wageActivity.getTotalAmount());
+		List<WagesActivityDao> existingWageActivities = wagesActivityRepository.findByCentreIdAndEmployeeIdAndTimeCreatedBetween(centreId, employeeId, lowerTimeCreated, upperTimeCreated);
+		for (WagesActivityDao existingWageActivity : existingWageActivities) {
+			if (existingWageActivity != null && existingWageActivity.getTotalAmount() != null && wageActivity.getTotalAmount() != null
+					&& existingWageActivity.getTotalAmount().equals(wageActivity.getTotalAmount()))
+				return true;
+		}
+		return false;
 	}
 
 	private boolean hasExistingRecord(Long centreId, ActivityResponseDTO activity, GroupWagesActivityDao groupWagesActivityDao) {
 		Date lowerTimeCreated = new Date(activity.getTimeCreated().getTime() - 1000);
 		Date upperTimeCreated = new Date(activity.getTimeCreated().getTime() + 1000);
-		GroupWagesActivityDao existingGroupWagesActivityDao = groupWagesActivityRepository.findByCentreIdAndTimeCreatedBetween(centreId, lowerTimeCreated, upperTimeCreated);
-		return existingGroupWagesActivityDao != null && groupWagesActivityDao.getTotalAmount() != null && existingGroupWagesActivityDao.getTotalAmount() != null 
-				&& existingGroupWagesActivityDao.getTotalAmount().equals(groupWagesActivityDao.getTotalAmount());
+		List<GroupWagesActivityDao> existingGroupWagesActivitiesDao = groupWagesActivityRepository.findByCentreIdAndTimeCreatedBetween(centreId, lowerTimeCreated, upperTimeCreated);
+		for (GroupWagesActivityDao existingGroupWagesActivityDao : existingGroupWagesActivitiesDao) {
+			if (existingGroupWagesActivityDao != null && groupWagesActivityDao.getTotalAmount() != null && existingGroupWagesActivityDao.getTotalAmount() != null 
+					&& existingGroupWagesActivityDao.getTotalAmount().equals(groupWagesActivityDao.getTotalAmount()))
+				return true;
+		}
+		return false;
 	}
 
 	@Override
 	public List<ActivityResponseDTO> getActivities(Long centreId, Long employeeId, Date lowerTimeCreated, Date upperTimeCreated, List<ActivityType> types) {
 		List<ActivityResponseDTO> activities = new ArrayList<>();
 		List<Long> activityTypes = types.stream().map(type -> activityMapper.getValue(type).longValue()).filter(value -> value != null).collect(Collectors.toList());
-		List<WagesActivityDao> wagesActivities = wagesActivityRepository.findByCentreIdAndEmployeeIdAndTimeCreatedBetweenAndTypeIn(centreId, employeeId, lowerTimeCreated, upperTimeCreated, activityTypes);
+		List<WagesActivityDao> wagesActivities = wagesActivityRepository.findByCentreIdAndEmployeeIdAndTimeCreatedBetweenAndTypeInOrderByTimeCreatedDesc(centreId, employeeId, lowerTimeCreated, upperTimeCreated, activityTypes);
 		
 		if(CollectionUtils.isNotEmpty(wagesActivities)) {
 			activities = wagesActivities.stream().map(w -> activityMapper.mapIndividualWagesDaoToActivityResponseDTO(w)).collect(Collectors.toList());
@@ -99,7 +107,7 @@ public class ActivityProviderImpl implements ActivityProvider {
 		types.add(ActivityType.PAYMENT);
 		List<ActivityResponseDTO> activities = new ArrayList<>();
 		List<Long> activityTypes = types.stream().map(type -> activityMapper.getValue(type).longValue()).filter(value -> value != null).collect(Collectors.toList());
-		List<WagesActivityDao> wagesActivities = wagesActivityRepository.findByCentreIdAndTimeCreatedBetweenAndTypeIn(centreId, lowerTimeCreated, upperTimeCreated, activityTypes);
+		List<WagesActivityDao> wagesActivities = wagesActivityRepository.findByCentreIdAndTimeCreatedBetweenAndTypeInOrderByTimeCreatedDesc(centreId, lowerTimeCreated, upperTimeCreated, activityTypes);
 		
 		if(CollectionUtils.isNotEmpty(wagesActivities)) {
 			activities = wagesActivities.stream().map(w -> activityMapper.mapIndividualWagesDaoToActivityResponseDTO(w)).collect(Collectors.toList());

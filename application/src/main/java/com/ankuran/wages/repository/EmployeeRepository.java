@@ -18,5 +18,5 @@ public interface EmployeeRepository extends JpaRepository<EmployeeDao, Long> {
     public EmployeeDao findByCentreIdAndId(Long centreId, Long id);
 	public List<EmployeeDao> findAllByCentreIdOrderByFullNameAsc(Long centreId);
 	public List<EmployeeDao> findAllByCentreIdAndStatusNotOrderByFullNameAsc(Long centreId, Byte status);
-	public EmployeeDao findByCentreIdAndFullNameAndJoiningTimeBetween(Long centreId, String fullName, Date lowerJoiningTime, Date upperJoiningTime);
+	public List<EmployeeDao> findByCentreIdAndFullNameAndJoiningTimeBetween(Long centreId, String fullName, Date lowerJoiningTime, Date upperJoiningTime);
 }

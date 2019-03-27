@@ -12,9 +12,9 @@ import com.ankuran.wages.model.WagesActivityDao;
  * @Created At 12/03/19.
  */
 public interface WagesActivityRepository extends JpaRepository<WagesActivityDao, Long> {
-	public WagesActivityDao findByCentreIdAndEmployeeIdAndTimeCreatedBetween(Long centreId, Long employeeId, Date lowerTimeCreated, Date upperTimeCreated);
+	public List<WagesActivityDao> findByCentreIdAndEmployeeIdAndTimeCreatedBetween(Long centreId, Long employeeId, Date lowerTimeCreated, Date upperTimeCreated);
 	
-	public List<WagesActivityDao> findByCentreIdAndEmployeeIdAndTimeCreatedBetweenAndTypeIn(Long centreId, Long employeeId, Date lowerTimeCreated, Date upperTimeCreated, List<Long> types);
+	public List<WagesActivityDao> findByCentreIdAndEmployeeIdAndTimeCreatedBetweenAndTypeInOrderByTimeCreatedDesc(Long centreId, Long employeeId, Date lowerTimeCreated, Date upperTimeCreated, List<Long> types);
 	
-	public List<WagesActivityDao> findByCentreIdAndTimeCreatedBetweenAndTypeIn(Long centreId, Date lowerTimeCreated, Date upperTimeCreated, List<Long> types);
+	public List<WagesActivityDao> findByCentreIdAndTimeCreatedBetweenAndTypeInOrderByTimeCreatedDesc(Long centreId, Date lowerTimeCreated, Date upperTimeCreated, List<Long> types);
 }

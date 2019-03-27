@@ -11,4 +11,5 @@ import com.ankuran.wages.model.ItemsDao;
 @Repository
 public interface ItemsRepository extends JpaRepository<ItemsDao, Long> {
 	public List<ItemsDao> findAllByTimeCreatedBetween(Date lowerTimeCreated,Date upperTimeCreated);
+	public List<ItemsDao> findAllByCategory(String category);
 }
