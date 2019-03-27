@@ -12,17 +12,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import com.ankuran.wages.enums.ItemHistoryEnum.HistoryReason;
 import com.ankuran.wages.enums.ItemHistoryEnum.HistoryType;
 import com.ankuran.wages.mapper.ItemMapper;
 import com.ankuran.wages.model.ItemFactDao;
 import com.ankuran.wages.model.ItemLabelsDao;
 import com.ankuran.wages.model.ItemsDao;
+import com.ankuran.wages.model.OutstandingSettlementDao;
 import com.ankuran.wages.model.response.ItemHistoryDTO;
 import com.ankuran.wages.model.response.ItemResponseDTO;
 import com.ankuran.wages.provider.ItemProvider;
 import com.ankuran.wages.repository.ItemFactRepository;
 import com.ankuran.wages.repository.ItemLabelsRepository;
 import com.ankuran.wages.repository.ItemsRepository;
+import com.ankuran.wages.repository.OutstandingSettlementRepository;
 
 @Component
 public class ItemProviderImpl implements ItemProvider{
@@ -39,6 +42,9 @@ public class ItemProviderImpl implements ItemProvider{
 	@Autowired
 	ItemFactRepository itemFactRepository;
 
+	@Autowired
+	OutstandingSettlementRepository outstandingSettlementRepository;
+	
 	@Override
 	public Long addProduct(ItemResponseDTO item) {
 		if (item != null && !StringUtils.isEmpty(item.getName()) && !StringUtils.isEmpty(item.getCategory())
@@ -142,6 +148,21 @@ public class ItemProviderImpl implements ItemProvider{
 					} else if (HistoryType.REMOVE.equals(itemHistory.getType())) {
 						Long availableUnits = currentUnits - itemHistory.getUnits();
 						itemDao.setAvailableUnits(availableUnits);
+						
+						if (HistoryReason.SALE.equals(itemHistory.getReason())) {
+							Optional<OutstandingSettlementDao> outstandingSettlementDaoOpt = outstandingSettlementRepository.findById(itemHistory.getCentreId());
+							if (outstandingSettlementDaoOpt.isPresent()) {
+								OutstandingSettlementDao outstandingSettlementDao = outstandingSettlementDaoOpt.get();
+								Double outstandingSettlement = outstandingSettlementDao.getOutstandingSettlement() + Math.abs(itemHistory.getTotalAmount());
+								outstandingSettlementDao.setOutstandingSettlement(outstandingSettlement);
+								outstandingSettlementRepository.save(outstandingSettlementDao);
+							} else {
+								OutstandingSettlementDao outstandingSettlementDao = new OutstandingSettlementDao();
+								outstandingSettlementDao.setOutstandingSettlement(Math.abs(itemHistory.getTotalAmount()));
+								outstandingSettlementDao.setId(itemHistory.getCentreId());
+								outstandingSettlementRepository.save(outstandingSettlementDao);
+							}
+						}
 					}
 					itemRepository.save(itemDao);
 				}
