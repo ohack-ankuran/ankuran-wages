@@ -9,4 +9,5 @@ public interface SettlementProvider {
 
 	SettlementDTO addSettlement(SettlementDTO settlementDTO);
 	List<SettlementDTO> getSettlements(Long centreId, Date lowerTimeCreated, Date upperTimeCreated);
+	Double getOutstandingSettlement(Long centreId);
 }

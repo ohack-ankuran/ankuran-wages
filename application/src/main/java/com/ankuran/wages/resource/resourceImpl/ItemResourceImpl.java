@@ -48,7 +48,7 @@ public class ItemResourceImpl implements ItemResource {
 
 	@Override
 	public ResponseEntity<ItemsResponseDTO> getProducts(String category, List<String> labels) {
-		List<ItemResponseDTO> items = itemProvider.getProducts(category, labels.stream().filter(x->!StringUtils.isBlank(x)).collect(Collectors.toList()));
+		List<ItemResponseDTO> items = itemProvider.getProducts(category, labels != null ? labels.stream().filter(x->!StringUtils.isBlank(x)).collect(Collectors.toList()) : labels);
 		return new ResponseEntity<ItemsResponseDTO>(new ItemsResponseDTO(items), HttpStatus.OK);
 	}
 

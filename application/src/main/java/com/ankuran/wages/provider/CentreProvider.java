@@ -9,4 +9,6 @@ public interface CentreProvider {
     public CentreResponseDTO fetchCentreById(long centreId);
 
 	public List<CentreResponseDTO> fetchCentres();
+
+	public Long addCentre(CentreResponseDTO centre);
 }

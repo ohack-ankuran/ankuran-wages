@@ -38,4 +38,16 @@ public class CentreResourceImpl implements CentreResource {
 		}
 		return new ResponseEntity<CentresResponseDTO>(HttpStatus.NO_CONTENT);
 	}
+
+	@Override
+	public ResponseEntity<CentreResponseDTO> addCentre(CentreResponseDTO centre) {
+		Long centreId = centreProvider.addCentre(centre);
+		if (centreId != null && centreId > 0) {
+			centre.setId(centreId);
+			return new ResponseEntity<CentreResponseDTO>(centre, HttpStatus.CREATED);
+		} else if (centreId != null && centreId == 0) {
+			return new ResponseEntity<CentreResponseDTO>(HttpStatus.CONFLICT);
+		}
+		return new ResponseEntity<CentreResponseDTO>(HttpStatus.BAD_REQUEST);
+	}
 }

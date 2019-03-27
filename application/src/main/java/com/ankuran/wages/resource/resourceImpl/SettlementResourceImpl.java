@@ -28,8 +28,9 @@ public class SettlementResourceImpl implements SettlementResource {
 	public ResponseEntity<SettlementsDTO> addSettlement(Long centreId, SettlementDTO settlementDTO) {
 		settlementDTO.setCentreId(centreId);
 		SettlementDTO savedSettlement = settlementProvider.addSettlement(settlementDTO);
+		Double outstandingSettlement = settlementProvider.getOutstandingSettlement(centreId);
 		if (savedSettlement != null && savedSettlement.getId() != null && savedSettlement.getId() > 0) {
-			return new ResponseEntity<SettlementsDTO>(new SettlementsDTO(new ArrayList<>(Arrays.asList(savedSettlement))), HttpStatus.CREATED);
+			return new ResponseEntity<SettlementsDTO>(new SettlementsDTO(new ArrayList<>(Arrays.asList(savedSettlement)), outstandingSettlement), HttpStatus.CREATED);
 		} else if (savedSettlement != null && savedSettlement.getId() != null && savedSettlement.getId() == 0) {
 			return new ResponseEntity<SettlementsDTO>(HttpStatus.CONFLICT);
 		}
@@ -41,7 +42,8 @@ public class SettlementResourceImpl implements SettlementResource {
 			String upperTimeCreated) throws ParseException {
 		Pair<Date, Date> timeRange = HelperUtil.getTimeRange(lowerTimeCreated, upperTimeCreated);
 		List<SettlementDTO> settlements = settlementProvider.getSettlements(centreId, timeRange.getLeft(), timeRange.getRight());
-		return new ResponseEntity<SettlementsDTO>(new SettlementsDTO(settlements), HttpStatus.OK);
+		Double outstandingSettlement = settlementProvider.getOutstandingSettlement(centreId);
+		return new ResponseEntity<SettlementsDTO>(new SettlementsDTO(settlements, outstandingSettlement), HttpStatus.OK);
 	}
 	
 

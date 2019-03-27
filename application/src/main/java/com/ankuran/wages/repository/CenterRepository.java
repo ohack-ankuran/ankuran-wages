@@ -14,7 +14,7 @@ import com.ankuran.wages.model.CentreDao;
 @Repository
 public interface CenterRepository extends JpaRepository<CentreDao, Long> {
 
-    public CentreDao findByName(String name);
+    public CentreDao findByNameIgnoreCase(String name);
     public CentreDao findById(long id);
     public List<CentreDao> findAll();
 }
