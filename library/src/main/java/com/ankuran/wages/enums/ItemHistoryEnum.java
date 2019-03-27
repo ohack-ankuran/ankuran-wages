@@ -6,9 +6,9 @@ public class ItemHistoryEnum {
 	public static final int HISTORY_TYPE_REMOVE = 2;
 	
 	public static final int HISTORY_REASON_STOCK_NEW = 1;
-	public static final int HISTORY_REASON_STOCK_TRANSFER = 1;
-	public static final int HISTORY_REASON_STOCK_TRANSFER_REVERSAL = 1;
-	public static final int HISTORY_REASON_SALE = 1;
+	public static final int HISTORY_REASON_STOCK_TRANSFER = 2;
+	public static final int HISTORY_REASON_STOCK_TRANSFER_REVERSAL = 3;
+	public static final int HISTORY_REASON_SALE = 4;
 	
 	public enum HistoryType {
 		ADD, REMOVE
